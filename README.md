@@ -154,33 +154,56 @@ Options meaning:
 * the other options are the same. Note that `-n` option is not necessary when `-f` option is used (and will be ignored), since the total number of events is in the configuration file
 
 ## Structure of the output file
-````
-eventnumber event number
-numvertex number of generated vertexes for each event
-numparticles number of generated particles
-numhitsDet number of hits in the detector
-numdets number of detectors
-neutronflag flag to identify neutrons
-muonflag flag to identify muons
-inelasticflag flag to identify hadrons
-energyDep energy deposited in the detector (summed over hits)
-xpos_vertex, ypos_vertex, zpos_vertex vertex coordinates
-time_vertex vertex time (0 for now)
-numparticle_vertex number of generated particles for each vertex
-pdgid_particle PDG identifier for the particle
-ivertex_particle vertex identifier for the particle
-px_particle, py_particle, pz_particle particle momentum components
-ekin_particle kinetic energy of the particle
-etot_particle total energy of the particle
-impact_param_particle impact parameter of the particle
-direct_angle_particle direction angle of the particle
-parentID_hits parentID of each hit
-pdgID_hits PDG identifier of each hit
-trackID_hits trackID of each hit
-time_hits time of each hit
-kinEne_hits kinetic energy of each hit
-x_hits, y_hits, z_hits hit coordinates
-x_vertex_hits, y_vertex_hits, z_vertex_hits not to be used now
-energyDep_hits deposited energy of each hit
-```
+
+The simulation produces an output root file (default filename out.root), containing the following variables:
+
+*eventnumber* event number
+
+*numvertex* number of generated vertexes for each event
+
+*numparticles* number of generated particles 
+
+*neutronflag* flag to identify neutrons
+
+*muonflag* flag to identify muons
+
+*inelasticflag* flag to identify hadrons
+
+*energyDep* energy deposited in the detector (summed over hits)
+
+*xpos_vertex, ypos_vertex, zpos_vertex* vertex coordinates
+
+*time_vertex* vertex time (0 for now)
+
+*numparticle_vertex* number of generated particles for each vertex
+
+*pdgid_particle* PDG identifier for the particle
+
+*ivertex_particle* vertex identifier for the particle
+
+*px_particle, py_particle, pz_particle* particle momentum components
+
+*ekin_particle* kinetic energy of the particle
+
+*etot_particle* total energy of the particle
+
+*impact_param_particle* impact parameter of the particle
+
+*direct_angle_particle* direction angle of the particle
+
+*parentID_hits* parentID of each hit
+
+*pdgID_hits* PDG identifier of each hit
+
+*trackID_hits* trackID of each hit
+
+*time_hits* time of each hit
+
+*kinEne_hits* kinetic energy of each hit
+
+*x_hits, y_hits, z_hits* hit coordinates
+
+*x_vertex_hits, y_vertex_hits, z_vertex_hits* not to be used now
+
+*energyDep_hits* deposited energy of each hit
 
