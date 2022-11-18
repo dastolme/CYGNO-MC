@@ -154,7 +154,7 @@ Options meaning:
 * the other options are the same. Note that `-n` option is not necessary when `-f` option is used (and will be ignored), since the total number of events is in the configuration file
 
 ## Structure of the output file
-
+````
 eventnumber event number
 numvertex number of generated vertexes for each event
 numparticles number of generated particles
@@ -182,4 +182,5 @@ kinEne_hits kinetic energy of each hit
 x_hits, y_hits, z_hits hit coordinates
 x_vertex_hits, y_vertex_hits, z_vertex_hits not to be used now
 energyDep_hits deposited energy of each hit
+```
 
