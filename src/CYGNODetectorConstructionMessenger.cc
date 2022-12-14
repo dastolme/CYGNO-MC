@@ -67,11 +67,12 @@ CYGNODetectorConstructionMessenger::CYGNODetectorConstructionMessenger
     fShieldDirectory->SetGuidance("Control commands for shield:");
     
     fCYGNOShieldingCmd = new G4UIcmdWithAString("/CYGNO/shield/select",this);
-    fCYGNOShieldingCmd->SetGuidance("Select the CYGNO shielding geometry. Possible choices: FullShield or NoShield");
+    fCYGNOShieldingCmd->SetGuidance("Select the CYGNO shielding geometry. Possible choices: FullShield, NoShield, CYGNO_04");
     fCYGNOShieldingCmd->SetGuidance("FullShield: four concentric boxes of different thicknesses and materials. Shielding thickness and material to be selected by user");
-    fCYGNOShieldingCmd->SetGuidance("NoShield: there is no shielding around the vessel.");
-    fCYGNOShieldingCmd->SetDefaultValue("FullShield");
-    fCYGNOShieldingCmd->SetCandidates("FullShield NoShield");
+    fCYGNOShieldingCmd->SetGuidance("NoShield:  no shielding.");
+    fCYGNOShieldingCmd->SetGuidance("CYGNO_04: Shieling design for CYGNO_04 as in TDR july 2022.");
+    fCYGNOShieldingCmd->SetDefaultValue("CYGNO_04");
+    fCYGNOShieldingCmd->SetCandidates("FullShield NoShield CYGNO_04");
     fCYGNOShieldingCmd->SetParameterName("choice",false);
     fCYGNOShieldingCmd->AvailableForStates(G4State_Init,G4State_Idle);
     
