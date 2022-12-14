@@ -516,7 +516,7 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
 
     //field cage resistive sheet
     cad_fc_sheet_solid = mesh_fc_sheet->TessellatedMesh();
-    cad_fc_sheet_logical = new G4LogicalVolume(cad_fc_sheet_solid, CYGNOMaterials->Material("Cu"), "cad_fc_sheet_logical", 0, 0, 0);
+    cad_fc_sheet_logical = new G4LogicalVolume(cad_fc_sheet_solid, CYGNOMaterials->Material("Perspex"), "cad_fc_sheet_logical", 0, 0, 0);
     cad_fc_sheet_logical->SetVisAttributes(CYGNOMaterials->VisAttributes("Perspex"));
 
     //GEM frame
@@ -755,13 +755,17 @@ void CYGNODetectorConstruction::SaveMassAndDensity()
       CYGNOProperties->AddVolumeNameMassAndDensity(Shield2_log);
       CYGNOProperties->AddVolumeNameMassAndDensity(Shield3_log);
   }
-  CYGNOProperties->AddVolumeNameMassAndDensity(AirBox_log);
+  else if (CYGNOShielding=="CYGNO_04"){
+  	ifstream infile(CYGNOGeomPath.c_str());
+  	if (infile.good()) {
+  	  CYGNOProperties->AddVolumeNameMassAndDensity(cad_water_shield_logical);
+  	  CYGNOProperties->AddVolumeNameMassAndDensity(cad_pe_shield_logical);
+  	  CYGNOProperties->AddVolumeNameMassAndDensity(cad_cu_shield_logical);
+  	  CYGNOProperties->AddVolumeNameMassAndDensity(cad_camera_shield_logical);
+  	}
+  }
   ifstream infile(CYGNOGeomPath.c_str());
   if (infile.good()) {
-    CYGNOProperties->AddVolumeNameMassAndDensity(cad_water_shield_logical);
-    CYGNOProperties->AddVolumeNameMassAndDensity(cad_pe_shield_logical);
-    CYGNOProperties->AddVolumeNameMassAndDensity(cad_cu_shield_logical);
-    CYGNOProperties->AddVolumeNameMassAndDensity(cad_camera_shield_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_acrylic_box_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_internal_structure_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_cameras_logical);
@@ -773,9 +777,11 @@ void CYGNODetectorConstruction::SaveMassAndDensity()
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_cathode_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_cathode_frame_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_fc_sheet_logical);
+  }
+  
+    CYGNOProperties->AddVolumeNameMassAndDensity(AirBox_log);
     CYGNOProperties->AddVolumeNameMassAndDensity(TPC_log);
     CYGNOProperties->AddVolumeNameMassAndDensity(CYGNO_log);
-  }
 
 //  if ( productionRockThinTube_phys )
 //	{
