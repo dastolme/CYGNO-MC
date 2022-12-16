@@ -557,8 +557,8 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     
     //CYGNO fiducial gas
     G4double CYGNO_x = 470.*mm;
-    G4double CYGNO_y = 392.*mm;
-    G4double CYGNO_z = 242.*mm;
+    G4double CYGNO_y = 784.*mm;
+    G4double CYGNO_z = 484.*mm;
       
     name_phys="CYGNO";
     name_log=name_phys+"_log";
@@ -684,31 +684,13 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
           	    cad_cathode_frame_logical,"cad_cathode_frame_physical", TPC_log, false, 0, true);
     } 
     //CYGNO sensitive regions
-    tr_CYGNO_gas_0=G4ThreeVector(480.*mm-CYGNO_x/2.,CYGNO_y/2.,CYGNO_z/2.);
-    tr_CYGNO_gas_1=G4ThreeVector(480.*mm-CYGNO_x/2.,CYGNO_y/2.,-1*CYGNO_z/2.);
-    tr_CYGNO_gas_2=G4ThreeVector(480.*mm-CYGNO_x/2.,-1.*CYGNO_y/2.,CYGNO_z/2.);
-    tr_CYGNO_gas_3=G4ThreeVector(480.*mm-CYGNO_x/2.,-1.*CYGNO_y/2.,-1*CYGNO_z/2);
-    tr_CYGNO_gas_4=G4ThreeVector(-480.*mm+CYGNO_x/2.,CYGNO_y/2.,CYGNO_z/2.);
-    tr_CYGNO_gas_5=G4ThreeVector(-480.*mm+CYGNO_x/2.,CYGNO_y/2.,-1*CYGNO_z/2.);
-    tr_CYGNO_gas_6=G4ThreeVector(-480.*mm+CYGNO_x/2.,-1.*CYGNO_y/2.,CYGNO_z/2.);
-    tr_CYGNO_gas_7=G4ThreeVector(-480.*mm+CYGNO_x/2.,-1.*CYGNO_y/2.,-1*CYGNO_z/2);
+    tr_CYGNO_gas_0=G4ThreeVector(-10-CYGNO_x/2.,0.,0.);
+    tr_CYGNO_gas_1=G4ThreeVector(10+CYGNO_x/2.,0.,0.);
 
     CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_0),
       	    CYGNO_log,"CYGNO_gas", TPC_log, false, 0, true);
     CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_1),
       	    CYGNO_log,"CYGNO_gas", TPC_log, false, 1, true);
-    CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_2),
-      	    CYGNO_log,"CYGNO_gas", TPC_log, false, 2, true);
-    CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_3),
-      	    CYGNO_log,"CYGNO_gas", TPC_log, false, 3, true);
-    CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_4),
-      	    CYGNO_log,"CYGNO_gas", TPC_log, false, 4, true);
-    CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_5),
-      	    CYGNO_log,"CYGNO_gas", TPC_log, false, 5, true);
-    CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_6),
-      	    CYGNO_log,"CYGNO_gas", TPC_log, false, 6, true);
-    CYGNO_phys = new G4PVPlacement(G4Transform3D(rot,tr_CYGNO_gas_7),
-      	    CYGNO_log,"CYGNO_gas", TPC_log, false, 7, true);
           
     
     //Cameras
