@@ -35,13 +35,17 @@ TMPDIR=%(TMPDIR)s
 mkdir -p ${WORKDIR}
 rm -rf ${WORKDIR}/*
 
-## root
+#root
 source /nfs/cygno/software/root-v6-22-02-py38-install/bin/thisroot.sh
+#python3.8
+#pip3.8 config set global.target /nfs/cygno/users/$USER/local/lib/python3.8/site-packages/
+export PYTHONPATH=$PYTHONPATH:/nfs/cygno/users/$USER/local/lib/python3.8/site-packages/
+export PATH=$PATH:/nfs/cygno/users/$USER/local/lib/python3.8/site-packages/:/nfs/cygno/users/$USER/local/lib/python3.8/site-packages/bin/
+
 ## geant
 source /nfs/cygno/software/geant4-v10.5.1-cygno-install/bin/geant4.sh
 ## cadmesh
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nfs/cygno/software/CADMesh-v1.1-install/lib
-
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nfs/cygno/software/CADMesh-v1.1-cygno-install/lib
 
 ## enter workdir
 cd ${WORKDIR}
@@ -49,7 +53,9 @@ cp -r ${CODEDIR}/input_distribution ./
 cp ${OUTDIR}pbs_workdir/${TAG}/${MACRONAME}.mac ./
 mkdir -p ${OUTDIR}${PBSOUTDIR}${TAG}
 mkdir -p ${OUTDIR}pbs_logs/${TAG}
-cp ${BUILDDIR}CYGNO ./
+#cp ${BUILDDIR}CYGNO ./
+/nfs/cygno/software/cmake-3.16.6-install/bin/cmake -DGeant4_DIR=/nfs/cygno/software/geant4-v10.5.1-cygno-install/lib64/Geant4-10.5.1/ -Dcadmesh_DIR=/nfs/cygno/software/CADMesh-v1.1-cygno-install/lib/cmake/cadmesh-1.1.0 ${CODEDIR}
+make -j`nproc`
 ./CYGNO ${MACRONAME}.mac &> ${OUTDIR}/pbs_logs/${TAG}/${MACRONAME}.log
 cp ${WORKDIR}/${MACRONAME}.root ${OUTDIR}/${PBSOUTDIR}${TAG}/
 cp ${TMPDIR}/${TAG}/pbslog_${MACRONAME}.log ${OUTDIR}/pbs_logs/${TAG}/
