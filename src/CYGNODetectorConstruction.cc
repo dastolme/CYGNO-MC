@@ -255,9 +255,9 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
         
 	//FIXME
 	//same as TPC gas
-	AirBox_x = 7.*m; //2.65*m;
-        AirBox_y = 7.*m; //1.45*m;
-        AirBox_z = 7.*m; //1.45*m;        
+	AirBox_x = 1.65*m; //2.65*m;
+        AirBox_y = 1.15*m; //1.45*m;
+        AirBox_z = 0.9*m; //1.45*m;        
         
 	tr_InsideVolume = G4ThreeVector(0.,0.,0.);
         rot_InsideVolume = G4RotationMatrix();		
@@ -637,8 +637,19 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
          	  	    cad_cu_shield_logical,"cad_cu_shield_physical", AirBox_log, false, 0, true);
          	cad_camera_shield_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
          	  	    cad_camera_shield_logical,"cad_camera_shield_physical", AirBox_log, false, 0, true);
+           
+            //cameras
+            cad_cameras_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+              	    cad_cameras_logical,"cad_cameras_physical", AirBox_log, false, 0, true);
+            cad_lenses_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+              	    cad_lenses_logical,"cad_lenses_physical", AirBox_log, false, 0, true);
+            cad_lenses_ext_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+              	    cad_lenses_ext_logical,"cad_lenses_ext_physical", AirBox_log, false, 0, true);
+            cad_pmts_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+              	    cad_pmts_logical,"cad_pmts_physical", AirBox_log, false, 0, true);
+
 	}
-    
+        
     }
     G4ThreeVector  size;
 
@@ -653,17 +664,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
         cad_acrylic_box_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
           	    cad_acrylic_box_logical,"cad_acrylic_box_physical", AirBox_log, false, 0, true);
         
-       
-        //cameras
-        cad_cameras_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-          	    cad_cameras_logical,"cad_cameras_physical", AirBox_log, false, 0, true);
-        cad_lenses_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-          	    cad_lenses_logical,"cad_lenses_physical", AirBox_log, false, 0, true);
-        cad_lenses_ext_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-          	    cad_lenses_ext_logical,"cad_lenses_ext_physical", AirBox_log, false, 0, true);
-        cad_pmts_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-          	    cad_pmts_logical,"cad_pmts_physical", AirBox_log, false, 0, true);
-
         //TPC gas
         tr=G4ThreeVector(0.,0.,0.);
         TPC_phys = new G4PVPlacement(G4Transform3D(rot,tr),
