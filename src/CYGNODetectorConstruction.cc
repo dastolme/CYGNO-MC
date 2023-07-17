@@ -639,13 +639,13 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
          	  	    cad_camera_shield_logical,"cad_camera_shield_physical", AirBox_log, false, 0, true);
            
             //cameras
-            cad_cameras_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+            cad_cameras_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
               	    cad_cameras_logical,"cad_cameras_physical", AirBox_log, false, 0, true);
-            cad_lenses_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+            cad_lenses_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
               	    cad_lenses_logical,"cad_lenses_physical", AirBox_log, false, 0, true);
-            cad_lenses_ext_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+            cad_lenses_ext_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
               	    cad_lenses_ext_logical,"cad_lenses_ext_physical", AirBox_log, false, 0, true);
-            cad_pmts_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+            cad_pmts_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
               	    cad_pmts_logical,"cad_pmts_physical", AirBox_log, false, 0, true);
 
 	}
