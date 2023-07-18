@@ -103,14 +103,19 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     //Cameras --> effective material, at the moment pyrex glass
     //FIXME
     G4cout << "========== Warning ============" << G4endl;
-    G4cout << "Now cameras made of glass, need to  modify to an effective material in order to have the correct total mass" << G4endl;
+    G4cout << "Cameras and PMTs made of quartz, effective density in order to have the correct total mass" << G4endl;
     G4cout << "===============================" << G4endl;
 
     //
     //Camera = FindOrBuildMaterial("G4_Pyrex_Glass");
-    Camera = FindOrBuildMaterial("G4_GLASS_PLATE");
+    //Camera = FindOrBuildMaterial("G4_GLASS_PLATE");
+    Camera = new G4Material ("Camera", 3.498 * g/cm3, ncomponents = 2);
+    Camera->AddElement (elSi, natoms = 1);
+    Camera->AddElement (elO, natoms = 2);
 
-
+    PMT = new G4Material ("PMT", 1.170 * g/cm3, ncomponents = 2);
+    PMT->AddElement (elSi, natoms = 1);
+    PMT->AddElement (elO, natoms = 2);
     
     //lngs rock material definition
     density = 2.71*g/cm3;
@@ -267,6 +272,7 @@ G4Material* CYGNODetectorMaterial::Material(G4String what)
   if(what == "CYGNO_gas")         material = CYGNO_gas;
   if(what == "Perspex")           material = Perspex;
   if(what == "Camera")            material = Camera;
+  if(what == "PMT")               material = PMT;
   if(what == "Kapton")            material = Kapton;
   if(what == "GEM")               material = GEM;
  
@@ -286,6 +292,7 @@ G4VisAttributes* CYGNODetectorMaterial::VisAttributes(G4String what)
   if(what == "LNGSRock")      vis = LNGSRockVis;
   if(what == "Concrete")      vis = ConcreteVis;
   if(what == "Camera")        vis = CameraVis;
+  if(what == "PMT")        vis = CameraVis;
   if(what == "CYGNO_gas")     vis = CYGNOGasVis;
   return vis;
 }

@@ -497,13 +497,13 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
       
       //lenses
       cad_lenses_solid = mesh_lenses->TessellatedMesh();
-      cad_lenses_logical = new G4LogicalVolume(cad_lenses_solid, CYGNOMaterials->Material("BSglass"), "cad_lenses_logical");
+      cad_lenses_logical = new G4LogicalVolume(cad_lenses_solid, CYGNOMaterials->Material("Camera"), "cad_lenses_logical");
       cad_lenses_logical->SetVisAttributes(CYGNOMaterials->VisAttributes("Camera"));
       
       //PMTs
       cad_pmts_solid = mesh_pmts->TessellatedMesh();
-      cad_pmts_logical = new G4LogicalVolume(cad_pmts_solid, CYGNOMaterials->Material("BSglass"), "cad_pmts_logical");
-      cad_pmts_logical->SetVisAttributes(CYGNOMaterials->VisAttributes("Camera"));
+      cad_pmts_logical = new G4LogicalVolume(cad_pmts_solid, CYGNOMaterials->Material("PMT"), "cad_pmts_logical");
+      cad_pmts_logical->SetVisAttributes(CYGNOMaterials->VisAttributes("PMT"));
       
       //internal structure
       cad_internal_structure_solid = mesh_internal_structure->TessellatedMesh();
