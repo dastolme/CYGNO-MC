@@ -62,12 +62,7 @@ You can put these commands in your `.bashrc` to execute them automatically every
 
 # Download CYGNO-MC repository
 
-Download CYGNO and LIME geometry files
-```
-git clone git@github.com:CYGNUS-RD/geometry.git
-```
-
-Download Geant4 code 
+Run 
 ```
 git clone git@github.com:CYGNUS-RD/CYGNO-MC.git
 ```

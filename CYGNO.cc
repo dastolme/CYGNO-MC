@@ -2,7 +2,7 @@
 #include "CYGNOPhysicsList.hh"
 #include "CYGNOPrimaryGeneratorAction.hh"
 #include "CYGNOActionInitialization.hh"
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4PhysListFactory.hh"
 //#ifdef G4MULTITHREADED
 //#include "G4MTRunManager.hh"
@@ -18,16 +18,16 @@
 #include "G4UItcsh.hh"
 //#include "Shielding.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 int main(int argc,char** argv)
 {
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //Instantiate the G4Timer object, to monitor the CPU time spent for 
   //the entire execution
   G4Timer* theTimer = new G4Timer();
@@ -58,12 +58,12 @@ int main(int argc,char** argv)
   CYGNODetectorConstruction* detector = new CYGNODetectorConstruction;
   runManager->SetUserInitialization(detector);
 
-#ifdef G4VIS_USE
+// #ifdef G4VIS_USE
   // visualization manager
   //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
+//   G4VisManager* visManager = new G4VisExecutive;
+//   visManager->Initialize();
+// #endif
 
   // PHYSICS
   // CYGNO physics list is the Shielding physics list with the addition of emlists option4 and of fluo,PIXE,Auger. In a second moment we can add the optical photons and simulate the scintillation
@@ -74,47 +74,42 @@ int main(int argc,char** argv)
   // User Action classes
   runManager->SetUserInitialization(new CYGNOActionInitialization(detector));
 
+  // Create your custom primary generator action with the binary file name
+  CYGNOPrimaryGeneratorAction* customGenerator = new CYGNOPrimaryGeneratorAction(detector);
+  // Set the filename for the binary file
+  customGenerator->SetFilename("output_binary.dat");
+  runManager->SetUserAction(customGenerator);
+
   // Initialize G4 kernel
   //
   runManager->Initialize();
       
   // Get the pointer to the User Interface manager
   //
+  G4VisManager* visManager = nullptr;
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
+  if (ui)   // interactive mode : define visualization and UI terminal
     {
+     visManager = new G4VisExecutive;
+     visManager->Initialize();
+     ui->SessionStart();
+     delete ui;
+
+     G4UIsession * session = 0;
+     session = new G4UIterminal(); 
+     UImanager->ApplyCommand("/control/execute vis.mac"); 
+     session->SessionStart();
+     delete session;
+
+     delete visManager;
+    }
+    
+  else           // batch mode
+    {    
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UImanager->ApplyCommand(command+fileName);
-    }
-    
-  else           // interactive mode : define visualization and UI terminal
-    { 
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif    
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-      //
-
-      //      UI->ApplyCommand("/control/execute vis.mac");     
-      session->SessionStart();
-      delete session;
-     
-#ifdef G4VIS_USE
-      delete visManager;
-#endif     
     }
 
 //Stop the benchmark here
@@ -130,4 +125,3 @@ G4cout << "The simulation took: " << theTimer->GetRealElapsed() << " s to run (r
 
   return 0;
 }
-

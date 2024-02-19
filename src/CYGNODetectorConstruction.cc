@@ -385,7 +385,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     //**********************************************************************
 
     char namestl[50];
-<<<<<<< HEAD
 
     // water_shield
     snprintf(namestl, sizeof(namestl), "%s/water_shield.stl", CYGNOGeomPath.c_str());
@@ -508,70 +507,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     infile.close();
 
 
-=======
-    sprintf(namestl,"%s/water_shield.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    ifstream infile(CYGNOGeomPath.c_str());
-    if (infile.good())
-    	mesh_water_shield = new CADMesh(namestl);    
-    sprintf(namestl,"%s/pe_shield.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_pe_shield = new CADMesh(namestl);    
-    sprintf(namestl,"%s/shield_Cu.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_cu_shield = new CADMesh(namestl);    
-    sprintf(namestl,"%s/camera_shield.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_camera_shield = new CADMesh(namestl);    
-    sprintf(namestl,"%s/cameras.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_cameras = new CADMesh(namestl);    
-    sprintf(namestl,"%s/lenses_ext.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_lenses_ext = new CADMesh(namestl);    
-    sprintf(namestl,"%s/lenses.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_lenses = new CADMesh(namestl);    
-    sprintf(namestl,"%s/pmts.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_pmts = new CADMesh(namestl);    
-    sprintf(namestl,"%s/acrylic_box.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-      mesh_acrylic_box = new CADMesh(namestl);
-    sprintf(namestl,"%s/cathode.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_cathode = new CADMesh(namestl);
-    sprintf(namestl,"%s/cathode_frame.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-    	mesh_cathode_frame = new CADMesh(namestl);
-    sprintf(namestl,"%s/fc_sheet.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-      mesh_fc_sheet = new CADMesh(namestl);
-    sprintf(namestl,"%s/internal_structure.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-      mesh_internal_structure = new CADMesh(namestl);
-    sprintf(namestl,"%s/gems.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;
-    if (infile.good())
-      mesh_gem= new CADMesh(namestl);  
-    sprintf(namestl,"%s/gem_frame.stl",CYGNOGeomPath.c_str());
-    G4cout << namestl << G4endl;     
-    if (infile.good())
-      mesh_gem_frame = new CADMesh(namestl); 
-
->>>>>>> 5ee9128a95cc0ea4eed06cf55254e7ed4e4e1aee
     if (infile.good()) { 
 
       mesh_water_shield->SetScale(mm);
@@ -753,7 +688,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     	rot_cad_shields = G4RotationMatrix();
     	rot_cad_shields.rotateX(-90.*deg);
     	rot_cad_shields.rotateY(-90.*deg);
-<<<<<<< HEAD
       if (infile.good()) { 
               cad_water_shield_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
                       cad_water_shield_logical,"cad_water_shield_physical", AirBox_log, false, 0, true);
@@ -775,29 +709,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
                         cad_pmts_logical,"cad_pmts_physical", AirBox_log, false, 0, true);
 
       }
-=======
-	if (infile.good()) { 
-         	cad_water_shield_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-         	  	    cad_water_shield_logical,"cad_water_shield_physical", AirBox_log, false, 0, true);
-         	cad_pe_shield_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-         	  	    cad_pe_shield_logical,"cad_pe_shield_physical", AirBox_log, false, 0, true);
-         	cad_cu_shield_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-         	  	    cad_cu_shield_logical,"cad_cu_shield_physical", AirBox_log, false, 0, true);
-         	cad_camera_shield_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-         	  	    cad_camera_shield_logical,"cad_camera_shield_physical", AirBox_log, false, 0, true);
-           
-            //cameras
-            cad_cameras_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-              	    cad_cameras_logical,"cad_cameras_physical", AirBox_log, false, 0, true);
-            cad_lenses_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-              	    cad_lenses_logical,"cad_lenses_physical", AirBox_log, false, 0, true);
-            cad_lenses_ext_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-              	    cad_lenses_ext_logical,"cad_lenses_ext_physical", AirBox_log, false, 0, true);
-            cad_pmts_physical = new G4PVPlacement(G4Transform3D(rot_cad_shields,tr_cad_shields), 
-              	    cad_pmts_logical,"cad_pmts_physical", AirBox_log, false, 0, true);
-
-	}
->>>>>>> 5ee9128a95cc0ea4eed06cf55254e7ed4e4e1aee
         
     }
     G4ThreeVector  size;
