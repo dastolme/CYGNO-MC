@@ -39,7 +39,7 @@
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4EmStandardPhysicsSS.hh"
 #include "G4EmDNAPhysics_option2.hh"
 #include "G4EmDNAPhysics_option4.hh"
@@ -65,7 +65,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4DataQuestionaire.hh"
 
 #include "G4Cerenkov.hh"
 #include "G4Scintillation.hh"
@@ -84,6 +83,11 @@
 */
 
 #include "CYGNOStepMax.hh"
+#include "G4UnitsTable.hh"
+
+//Radioactivity
+// #include "G4Radioactivation.hh"
+// #include "G4RadioactiveDecay.hh"
 
 
 G4ThreadLocal G4Cerenkov* CYGNOPhysicsList::fCerenkovProcess = 0;
@@ -144,7 +148,6 @@ CYGNOPhysicsList::CYGNOPhysicsList(G4int verbose, G4String LEN_model, G4String H
   else if ( LEN_model == "LEND" ) 
   {
      RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation) );
-     G4DataQuestionaire itt(lend);
   }
   else 
   {
@@ -243,16 +246,14 @@ CYGNOPhysicsList::CYGNOPhysicsList(G4int verbose, G4String LEN_model, G4String H
 
 
   // Em options  
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);//not really fundamental
-  emOptions.SetDEDXBinningForCSDARange(10*10);//not really fundamental
   //emOptions.SetMaxEnergy(100*GeV);
   //emOptions..SetDEDXBinning(200);
   //emOptions.SetLambdaBinning(200);//TO BE TESTED
   //emOptions.SetDeexcitationActiveRegion(true); //TBC
-  emOptions.SetFluo(true);
-  emOptions.SetAuger(true);
-  emOptions.SetPIXE(true);
+  G4EmParameters* emParameters = G4EmParameters::Instance();
+  emParameters->SetFluo(true);
+  emParameters->SetPixe(true);
+  emParameters->SetAuger(true);
 
   defaultCutValue = 0.001*mm;
   cutForGamma     = defaultCutValue;
@@ -317,7 +318,7 @@ void CYGNOPhysicsList::ConstructOp()
   fCerenkovProcess->SetTrackSecondariesFirst(true);
   //fCerenkovProcess->SetVerboseLevel(2);
   
-  fScintillationProcess->SetScintillationYieldFactor(1.);
+  // fScintillationProcess->SetScintillationYieldFactor(1.);
   fScintillationProcess->SetTrackSecondariesFirst(true);
 
   // Use Birks Correction in the Scintillation process

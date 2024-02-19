@@ -35,7 +35,7 @@ void CYGNOEventAction::BeginOfEventAction(const G4Event* evt)
   CYGNOAnalysis* analysis = CYGNOAnalysis::getInstance();
   analysis->BeginOfEvent(evt,fDetector);
   
- fDetectorHit = false;
+  fDetectorHit = false;
 }
 
 void CYGNOEventAction::EndOfEventAction(const G4Event* evt)

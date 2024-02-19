@@ -4,9 +4,13 @@
 #include "G4UserEventAction.hh"
 #include "CYGNORunAction.hh"
 
+#include "G4GenericMessenger.hh"
+#include <vector>
+
 class G4Event;
 class CYGNOEventActionMessenger;
 class CYGNODetectorConstruction;
+class G4Track;
 
 class CYGNOEventAction : public G4UserEventAction
 {

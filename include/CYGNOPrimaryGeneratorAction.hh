@@ -24,12 +24,17 @@ class CYGNOPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   void GeneratePrimaries(G4Event*);  
   void SetEnergy(G4double ene) {particle_energy = ene;}
   G4double GetEnergy() {return particle_energy;}
+  void SetFilename(const G4String& filename); // Method to set the filename
 
   private:
   G4GeneralParticleSource* particleGun;
   CYGNODetectorConstruction* myDetector;
   G4int n_particle;
   G4double particle_energy;
+
+  G4String filename; // Member variable to store the filename
+
+  std::ifstream inputFile;
  
   G4ThreeVector position;
 //  CYGNOPrimaryGeneratorActionMessenger* fMessenger;

@@ -14,6 +14,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "CYGNOEventAction.hh"
 
 #define PI 3.14159265
 using namespace std;
@@ -30,18 +31,45 @@ CYGNOPrimaryGeneratorAction::CYGNOPrimaryGeneratorAction(CYGNODetectorConstructi
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
   particleGun->SetParticleDefinition(particle);
   particle_energy = 1.0*MeV;
-  }
+
+}
 
 CYGNOPrimaryGeneratorAction::~CYGNOPrimaryGeneratorAction()
 {
   //delete fMessenger;
   delete particleGun;
+  inputFile.close();
 }
 
 void CYGNOPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
   G4int numParticles=1;
   particleGun->SetNumberOfParticles(numParticles);
+  // particleGun->GeneratePrimaryVertex(anEvent);
+
+  // Read position from binary file
+  G4ThreeVector position;
+  double x, y, z;
+
+  inputFile.read(reinterpret_cast<char*>(&x), sizeof(double));
+  inputFile.read(reinterpret_cast<char*>(&y), sizeof(double));
+  inputFile.read(reinterpret_cast<char*>(&z), sizeof(double));
+
+  // Set position dynamically in GPS
+  position.set(x, y, z);
+  particleGun->SetParticlePosition(position);
+
+  // Generate primary vertex
   particleGun->GeneratePrimaryVertex(anEvent);
+}
+
+void CYGNOPrimaryGeneratorAction::SetFilename(const G4String& newFilename) {
+  filename = newFilename;
+  inputFile.open(filename, std::ios::binary);
+
+  if (!inputFile.is_open()) {
+      G4Exception("CYGNOPrimaryGeneratorAction::SetFilename",
+                  "FileOpenError", FatalException, "Failed to open binary file.");
+  }
 }
 

@@ -2,7 +2,7 @@
 #define CYGNOAnalysis_h 1
 
 #include "globals.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include <vector>
 #include <string>
 #include <unordered_map>

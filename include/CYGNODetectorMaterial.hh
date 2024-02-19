@@ -66,6 +66,7 @@ G4Material* Steel;
 G4Material* PE;
 G4Material* Concrete;
 G4Material* Camera;
+G4Material* PMT;
 G4Material* Perspex;
 G4Material* CYGNO_gas;
 G4Material* SF6_gas;

@@ -51,7 +51,7 @@ void CYGNORunAction::BeginOfRunAction(const G4Run* aRun)
 	analysisManager->OpenFile();
 }
 
-void CYGNORunAction::EndOfRunAction(const G4Run*)
+void CYGNORunAction::EndOfRunAction(const G4Run* run)
 { 
   
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

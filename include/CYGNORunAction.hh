@@ -4,6 +4,8 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
+#include <fstream>
+
 class G4Run;
 class CYGNORunActionMessenger;
 class CYGNODetectorConstruction;
