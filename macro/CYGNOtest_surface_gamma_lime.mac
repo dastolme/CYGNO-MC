@@ -1,4 +1,4 @@
-#/CYGNO/pathtocad /storage/DATA-03/cygnorm3/geometry/v2/
+/CYGNO/pathtocad /storage/DATA-03/cygnorm3//geometry/lime/ 
 
 #CYGNO SHIELD
 #define the experiment location:
@@ -9,7 +9,7 @@
 /CYGNO/shield/thick0 1 cm
 /CYGNO/shield/thick1 1 cm
 /CYGNO/shield/thick2 1 cm
-/CYGNO/shield/thick3 50 cm
+/CYGNO/shield/thick3 1 cm
 /CYGNO/shield/mat0 Air
 /CYGNO/shield/mat1 Air
 /CYGNO/shield/mat2 Air
@@ -191,9 +191,9 @@
 /tracking/verbose 0
 /CYGNO/reportingfrequency 100000
 #Output file name
-/CYGNO/outfile gamma_test
+/CYGNO/outfile gamma_test_lime
 /random/setSeeds 575841909 838392975
 #/process/em/deexcitationIgnoreCut true
 
 # define number of events to be generated
-/run/beamOn 10000
+/run/beamOn 10000000

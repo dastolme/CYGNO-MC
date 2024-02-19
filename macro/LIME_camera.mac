@@ -1,0 +1,62 @@
+/CYGNO/pathtocad /nfs/cygno/geometry/lime/
+
+#CYGNO SHIELD
+#define the experiment location:
+/CYGNO/lab/select NoCave
+
+#define if the geometry of the shielding is Full or NoShield
+/CYGNO/shield/select FullShield
+/CYGNO/shield/thick0 1 cm
+/CYGNO/shield/thick1 1 cm
+/CYGNO/shield/thick2 100 cm
+/CYGNO/shield/thick3 10 cm
+/CYGNO/shield/mat0 Air
+/CYGNO/shield/mat1 Air
+/CYGNO/shield/mat2 Water
+/CYGNO/shield/mat3 Cu
+
+#define fraction of He and CF4 in the sensitive gas
+/CYGNO/gas/frac_He 0.6
+/CYGNO/gas/frac_CF4 0.4
+
+# FINALLY ISSUE THE GEOMETRY UPDATE
+/CYGNO/updateGeo
+####
+
+
+
+# GENERATION OF RADIOACTIVE PARTICLES
+# define particle or ion 
+/gps/particle ion
+/gps/ion 19 40
+# define energy (set 0 for radioactive decaying nuclei)
+/gps/energy 0. keV
+/gps/pos/shape Para
+/gps/pos/centre 78.5 0. 0. cm
+/gps/pos/halfx 15 cm
+/gps/pos/halfy 10 cm
+/gps/pos/halfz 10 cm
+#
+# to use if there is in the code a Source volume 
+# 
+/gps/pos/type Volume
+/gps/pos/confine camera
+#
+#Save only events that pass that have hits in the sensitive gas
+/CYGNO/cutoutfile 0
+/CYGNO/save_hits_branches 1
+/CYGNO/registeron 0
+#
+/run/initialize
+#change these for debug
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/CYGNO/reportingfrequency 1000
+#Output file name
+/CYGNO/outfile 40K_camera
+/random/setSeeds 575841909 838392975
+#/process/em/deexcitationIgnoreCut true
+
+# define number of events to be generated
+/run/beamOn 10000

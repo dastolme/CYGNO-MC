@@ -1,0 +1,180 @@
+/CYGNO/pathtocad /nfs/cygno/geometry/lime/
+
+#CYGNO SHIELD
+#define the experiment location:
+/CYGNO/lab/select NoCave
+
+#define if the geometry of the shielding is Full or NoShield
+#/CYGNO/shield/select NoShield
+/CYGNO/shield/thick0 1 cm
+/CYGNO/shield/thick1 1 cm
+/CYGNO/shield/thick2 1 cm
+/CYGNO/shield/thick3 5 cm
+/CYGNO/shield/mat0 Air
+/CYGNO/shield/mat1 Air
+/CYGNO/shield/mat2 Air
+/CYGNO/shield/mat3 Cu
+
+#define fraction of He and CF4 in the sensitive gas
+/CYGNO/gas/frac_He 0.6
+/CYGNO/gas/frac_CF4 0.4
+
+# FINALLY ISSUE THE GEOMETRY UPDATE
+/CYGNO/updateGeo
+####
+
+# GENERATION OF NEUTRONS
+/gps/particle gamma
+/gps/pos/type Surface
+#/gps/pos/shape Sphere
+/gps/pos/shape Para
+/gps/pos/centre 0. 0. 0. m
+#/gps/pos/radius 3 m
+/gps/pos/halfx 1.2 m
+/gps/pos/halfy 0.5 m
+/gps/pos/halfz 0.5 m
+
+/gps/ene/type Arb
+/gps/hist/type energy
+/gps/hist/file ./input_distribution/E_after_50cmWater_MeV.txt
+/gps/hist/inter Lin
+/gps/ang/type user
+/gps/hist/type theta  
+/gps/hist/point 0.0              0.000208528211438
+/gps/hist/point 0.052359877559   0.000596556559427
+/gps/hist/point 0.078539816339   0.001006504066
+/gps/hist/point 0.10471975512    0.00137853735232
+/gps/hist/point 0.1308996939     0.00180033305273
+/gps/hist/point 0.157079632679   0.00217651320689
+/gps/hist/point 0.183259571459  0.0026119343302
+/gps/hist/point 0.209439510239  0.00300766400418
+/gps/hist/point 0.235619449019  0.00335066921561
+/gps/hist/point 0.261799387799  0.0037102618984
+/gps/hist/point 0.287979326579  0.00416345531246
+/gps/hist/point 0.314159265359  0.00443714858998
+/gps/hist/point 0.340339204139  0.00481688320228
+/gps/hist/point 0.366519142919  0.00515277949741
+/gps/hist/point 0.392699081699  0.00552422037404
+/gps/hist/point 0.418879020479  0.00583760510088
+/gps/hist/point 0.445058959259  0.00617113175725
+/gps/hist/point 0.471238898038  0.00639032334313
+/gps/hist/point 0.497418836818  0.0067659110876
+/gps/hist/point 0.523598775598  0.00695015050168
+/gps/hist/point 0.549778714378  0.00725050221532
+/gps/hist/point 0.575958653158  0.00750701561177
+/gps/hist/point 0.602138591938  0.00774871876594
+/gps/hist/point 0.628318530718  0.00789267432099
+/gps/hist/point 0.654498469498  0.00819065639586
+/gps/hist/point 0.680678408278  0.00833164990246
+/gps/hist/point 0.706858347058  0.00854195534297
+/gps/hist/point 0.733038285838  0.00877595717115
+/gps/hist/point 0.759218224618  0.00902654647069
+/gps/hist/point 0.785398163397  0.00904905803897
+/gps/hist/point 0.811578102177  0.00930912589358
+/gps/hist/point 0.837758040957  0.00950580591118
+/gps/hist/point 0.863937979737  0.00971077966447
+/gps/hist/point 0.890117918517  0.00970367074817
+/gps/hist/point 0.916297857297  0.010047860779
+/gps/hist/point 0.942477796077  0.0102078113957
+/gps/hist/point 0.968657734857  0.0104400359948
+/gps/hist/point 0.994837673637  0.0106361236027
+/gps/hist/point 1.02101761242   0.0107107672239
+/gps/hist/point 1.0471975512    0.0108612392855
+/gps/hist/point 1.07337748998  0.0111290084661
+/gps/hist/point 1.09955742876  0.0111278236467
+/gps/hist/point 1.12573736754  0.0113695268009
+/gps/hist/point 1.15191730632  0.011515259585
+/gps/hist/point 1.1780972451   0.0116953521313
+/gps/hist/point 1.20427718388  0.0117771046687
+/gps/hist/point 1.23045712266  0.0119127664881
+/gps/hist/point 1.25663706144  0.0120703474661
+/gps/hist/point 1.28281700022  0.0121793508493
+/gps/hist/point 1.308996939    0.0123090885718
+/gps/hist/point 1.33517687778  0.0123724764088
+/gps/hist/point 1.36135681656  0.0123161974881
+/gps/hist/point 1.38753675534  0.012496882444
+/gps/hist/point 1.41371669412  0.0124500820784
+/gps/hist/point 1.4398966329   0.0123049417039
+/gps/hist/point 1.46607657168 0.0122847997744
+/gps/hist/point 1.49225651046  0.012458375814
+/gps/hist/point 1.51843644924  0.0122640654352
+/gps/hist/point 1.54461638801  0.0123262684528
+/gps/hist/point 1.57079632679  0.0121029299991
+/gps/hist/point 1.59697626557  0.0120614613207
+/gps/hist/point 1.62315620435  0.0122148954308
+/gps/hist/point 1.64933614313  0.0124453428008
+/gps/hist/point 1.67551608191  0.0122895390519
+/gps/hist/point 1.70169602069  0.0123736612281
+/gps/hist/point 1.72787595947  0.0123973576158
+/gps/hist/point 1.75405589825  0.0123819549638
+/gps/hist/point 1.78023583703  0.0123884714704
+/gps/hist/point 1.80641577581  0.012418091955
+/gps/hist/point 1.83259571459  0.0121669102458
+/gps/hist/point 1.85877565337  0.0122865770035
+/gps/hist/point 1.88495559215  0.0123126430299
+/gps/hist/point 1.91113553093  0.0121035224088
+/gps/hist/point 1.93731546971  0.0118647813031
+/gps/hist/point 1.96349540849  0.0119103968493
+/gps/hist/point 1.98967534727  0.0116153768229
+/gps/hist/point 2.01585528605  0.0115365863339
+/gps/hist/point 2.04203522483  0.0113908535498
+/gps/hist/point 2.06821516361  0.0112540069111
+/gps/hist/point 2.09439510239  0.0109743895366
+/gps/hist/point 2.12057504117  0.0108790115763
+/gps/hist/point 2.14675497995  0.0107261698758
+/gps/hist/point 2.17293491873  0.0104986845543
+/gps/hist/point 2.19911485751  0.0103150375499
+/gps/hist/point 2.22529479629  0.0104441828627
+/gps/hist/point 2.25147473507  0.0100004680037
+/gps/hist/point 2.27765467385  0.00991338377899
+/gps/hist/point 2.30383461263  0.0096663489376
+/gps/hist/point 2.33001455141  0.00947263096845
+/gps/hist/point 2.35619449019  0.00926706480547
+/gps/hist/point 2.38237442897  0.00921315552354
+/gps/hist/point 2.40855436775  0.00896197381431
+/gps/hist/point 2.43473430653  0.00876944066454
+/gps/hist/point 2.46091424531  0.00848626883196
+/gps/hist/point 2.48709418409  0.00832572580554
+/gps/hist/point 2.51327412287  0.00794243673509
+/gps/hist/point 2.53945406165  0.00798805228134
+/gps/hist/point 2.56563400043  0.00766400418004
+/gps/hist/point 2.59181393921  0.0074205237968
+/gps/hist/point 2.61799387799  0.007195408114
+/gps/hist/point 2.64417381677  0.00705678424617
+/gps/hist/point 2.67035375555  0.00673688301271
+/gps/hist/point 2.69653369433  0.00642586792463
+/gps/hist/point 2.72271363311  0.00615039741804
+/gps/hist/point 2.74889357189  0.00588144341806
+/gps/hist/point 2.77507351067  0.00557753724628
+/gps/hist/point 2.80125344945  0.005238086493
+/gps/hist/point 2.82743338823  0.00483347067365
+/gps/hist/point 2.85361332701  0.00460776258115
+/gps/hist/point 2.87979326579  0.00414627543141
+/gps/hist/point 2.90597320457  0.00375528503496
+/gps/hist/point 2.93215314335  0.00334533752838
+/gps/hist/point 2.95833308213  0.00295434713194
+/gps/hist/point 2.98451302091  0.00256691119364
+/gps/hist/point 3.01069295969  0.00225115682803
+/gps/hist/point 3.03687289847  0.00179381654612
+/gps/hist/point 3.06305283725  0.00138860831708
+/gps/hist/point 3.08923277603  0.00100591165631
+/gps/hist/point 3.14159265358  0.000592409691586
+
+/CYGNO/cutoutfile 1 # 1 : Save only events that pass that have hits in the sensitive gas, 0: save all events  
+/CYGNO/save_hits_branches 0 # 1 : save *_hits branches, 0 : do not save *_hits branches
+/CYGNO/registeron 0  # 1 : save branches *_flu to check the fluxes of particles in external shields, 0 : do not save *_flu branches
+  
+#
+/run/initialize
+#change these for debug
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/CYGNO/reportingfrequency 100000
+#Output file name
+/CYGNO/outfile gamma_test
+/random/setSeeds 575841909 838392975
+#/process/em/deexcitationIgnoreCut true
+
+# define number of events to be generated
+/run/beamOn 100000

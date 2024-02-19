@@ -7,10 +7,11 @@ def ReadFile(filename, filedir='/ua9/user/dimperig/CYGNO/CYGNO-MC/backgrounds'):
   keys=[]
 
   if not os.path.isdir(filedir):
-    print('ERROR: Directory %s does not exists' %(filedir))
+    print ('ERROR: Directory %s does not exists' %(filedir))
     return
   if not os.path.isfile(filedir+filename):
-    print('ERROR: File %s does not exists' %(filename))
+    print ('ERROR: File %s does not exists' %(filename))
+>>>>>>> 5ee9128a95cc0ea4eed06cf55254e7ed4e4e1aee
     return
 
 
