@@ -38,26 +38,25 @@ CYGNOPrimaryGeneratorAction::~CYGNOPrimaryGeneratorAction()
 {
   //delete fMessenger;
   delete particleGun;
-  inputFile.close();
+  // inputFile.close();
 }
 
 void CYGNOPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
   G4int numParticles=1;
   particleGun->SetNumberOfParticles(numParticles);
-  // particleGun->GeneratePrimaryVertex(anEvent);
 
   // Read position from binary file
-  G4ThreeVector position;
-  double x, y, z;
+  // G4ThreeVector position;
+  // double x, y, z;
 
-  inputFile.read(reinterpret_cast<char*>(&x), sizeof(double));
-  inputFile.read(reinterpret_cast<char*>(&y), sizeof(double));
-  inputFile.read(reinterpret_cast<char*>(&z), sizeof(double));
+  // inputFile.read(reinterpret_cast<char*>(&x), sizeof(double));
+  // inputFile.read(reinterpret_cast<char*>(&y), sizeof(double));
+  // inputFile.read(reinterpret_cast<char*>(&z), sizeof(double));
 
   // Set position dynamically in GPS
-  position.set(x, y, z);
-  particleGun->SetParticlePosition(position);
+  // position.set(x, y, z);
+  // particleGun->SetParticlePosition(position);
 
   // Generate primary vertex
   particleGun->GeneratePrimaryVertex(anEvent);

@@ -75,10 +75,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new CYGNOActionInitialization(detector));
 
   // Create your custom primary generator action with the binary file name
-  CYGNOPrimaryGeneratorAction* customGenerator = new CYGNOPrimaryGeneratorAction(detector);
+  // CYGNOPrimaryGeneratorAction* customGenerator = new CYGNOPrimaryGeneratorAction(detector);
   // Set the filename for the binary file
-  customGenerator->SetFilename("output_binary.dat");
-  runManager->SetUserAction(customGenerator);
+  // customGenerator->SetFilename("output_binary.dat");
+  // runManager->SetUserAction(customGenerator);
 
   // Initialize G4 kernel
   //
