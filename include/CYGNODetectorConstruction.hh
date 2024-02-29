@@ -97,7 +97,11 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     //CADMesh
     CADMesh* mesh_water_shield;
     CADMesh* mesh_pe_shield;
-    CADMesh* mesh_cu_shield;
+    // CADMesh* mesh_cu_shield;
+    CADMesh* mesh_cu_shield0;
+    CADMesh* mesh_cu_shield1;
+    CADMesh* mesh_cu_shield2;
+    CADMesh* mesh_cu_shield3;
     CADMesh* mesh_camera_shield;
     CADMesh* mesh_acrylic_box;
     CADMesh* mesh_cathode;
@@ -154,7 +158,11 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     //Solids and meshes
     G4VSolid* cad_water_shield_solid;
     G4VSolid* cad_pe_shield_solid;
-    G4VSolid* cad_cu_shield_solid;
+    // G4VSolid* cad_cu_shield_solid;
+    G4VSolid* cad_cu_shield0_solid;
+    G4VSolid* cad_cu_shield1_solid;
+    G4VSolid* cad_cu_shield2_solid;
+    G4VSolid* cad_cu_shield3_solid;
     G4VSolid* cad_camera_shield_solid;
     G4VSolid* cad_acrylic_box_solid;
     G4VSolid* cad_cathode_solid;
@@ -181,7 +189,11 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume* cad_water_shield_logical;
     G4LogicalVolume* cad_pe_shield_logical;
-    G4LogicalVolume* cad_cu_shield_logical;
+    // G4LogicalVolume* cad_cu_shield_logical;
+    G4LogicalVolume* cad_cu_shield0_logical;
+    G4LogicalVolume* cad_cu_shield1_logical;
+    G4LogicalVolume* cad_cu_shield2_logical;
+    G4LogicalVolume* cad_cu_shield3_logical;
     G4LogicalVolume* cad_camera_shield_logical;
     G4LogicalVolume* cad_acrylic_box_logical;
     G4LogicalVolume* cad_cathode_logical;
@@ -211,7 +223,11 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     
     G4VPhysicalVolume* cad_water_shield_physical;
     G4VPhysicalVolume* cad_pe_shield_physical;
-    G4VPhysicalVolume* cad_cu_shield_physical;
+    // G4VPhysicalVolume* cad_cu_shield_physical;
+    G4VPhysicalVolume* cad_cu_shield0_physical;
+    G4VPhysicalVolume* cad_cu_shield1_physical;
+    G4VPhysicalVolume* cad_cu_shield2_physical;
+    G4VPhysicalVolume* cad_cu_shield3_physical;
     G4VPhysicalVolume* cad_camera_shield_physical;
     G4VPhysicalVolume* cad_acrylic_box_physical;
     G4VPhysicalVolume* cad_cathode_physical;
