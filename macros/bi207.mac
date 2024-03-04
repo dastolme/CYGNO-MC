@@ -1,0 +1,38 @@
+# GENERATION OF RADIOACTIVE PARTICLES
+
+# Set a high threshold for very long decay time
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
+# define particle or ion 
+/gps/particle ion
+/gps/ion 83 207 0 0
+
+# define energy (set 0 for radioactive decaying nuclei)
+/gps/energy 0. keV
+/gps/pos/shape Para
+/gps/pos/centre 0. 97. 0. cm
+/gps/pos/halfx 1.1 m
+/gps/pos/halfy 1.6 m
+/gps/pos/halfz 1.1 m
+# 
+/gps/pos/type Volume
+/gps/pos/confine cad_cu_shield0_physical
+#
+#Save only events that pass that have hits in the sensitive gas
+/CYGNO/cutoutfile 1
+/CYGNO/save_hits_branches 0
+/CYGNO/registeron 0
+#
+/run/initialize
+#change these for debug
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+#/CYGNO/reportingfrequency 10000
+#Output file name
+/CYGNO/outfile bi207_shield0_Cu
+/random/setSeeds 575841909 838392975
+#/process/em/deexcitationIgnoreCut true
+
+# define number of events to be generated
+/run/beamOn 10000000
