@@ -37,6 +37,7 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     void SaveMassAndDensity();
     void UpdateGeometry();
     void UpdateGeometryPath(G4String newpath);
+    void ConstructSDandField() override;
 
     void SetExternalRockThickness(G4double rockthick) {rockThicknessOuter = rockthick;}
     void SetProductionRockThickness(G4double rockthick) {productionLayerThickness = rockthick;}

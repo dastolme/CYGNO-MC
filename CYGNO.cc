@@ -4,11 +4,7 @@
 #include "CYGNOActionInitialization.hh"
 #include "G4EmParameters.hh"
 #include "G4PhysListFactory.hh"
-//#ifdef G4MULTITHREADED
-//#include "G4MTRunManager.hh"
-//#else
-#include "G4RunManager.hh"
-//#endif
+#include "G4MTRunManager.hh"
 
 #include "G4Timer.hh"
 #include "Randomize.hh"
@@ -21,9 +17,12 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
+#include "TROOT.h"
+#include "TThread.h"
+
 int main(int argc,char** argv)
 {
-
+  
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
@@ -44,14 +43,9 @@ int main(int argc,char** argv)
   //  G4VSteppingVerbose* verbosity = new G4VSteppingVerbose;
   //  G4VSteppingVerbose::SetInstance(verbosity);
   
-  // Run manager
-  
-  //#ifdef G4MULTITHREADED
-  //G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
-  //#else
-  G4RunManager * runManager = new G4RunManager;
-  //#endif
+  // Run manager 
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
 
   // User Initialization classes (mandatory)
   //
@@ -75,14 +69,16 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new CYGNOActionInitialization(detector));
 
   // Create your custom primary generator action with the binary file name
-  // CYGNOPrimaryGeneratorAction* customGenerator = new CYGNOPrimaryGeneratorAction(detector);
+  // CYGNOPrimaryGeneratorAction* myGeneratorAction = new CYGNOPrimaryGeneratorAction(detector);
   // Set the filename for the binary file
   // customGenerator->SetFilename("output_binary.dat");
-  // runManager->SetUserAction(customGenerator);
+  
+  // Create your custom primary generator action with the binary file name
+  // runManager->SetUserAction(myGeneratorAction);
 
   // Initialize G4 kernel
   //
-  runManager->Initialize();
+  // runManager->Initialize();
       
   // Get the pointer to the User Interface manager
   //

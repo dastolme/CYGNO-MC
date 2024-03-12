@@ -48,7 +48,8 @@ CYGNOActionInitialization::~CYGNOActionInitialization()
 
 void CYGNOActionInitialization::BuildForMaster() const
 {
-//  SetUserAction(new CYGNORunAction(fDetector));
+  CYGNORunAction* run_action = new CYGNORunAction(fDetector);
+  SetUserAction(run_action);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

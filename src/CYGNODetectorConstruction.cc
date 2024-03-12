@@ -71,9 +71,9 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     //register the SD
     G4SDManager* SDmanager=G4SDManager::GetSDMpointer();
     
-    G4String CYGNOSDname = "CYGNO/CYGNOSD";
-    CYGNOSD = new CYGNOSensitiveDetector( CYGNOSDname );
-    SDmanager->AddNewDetector( CYGNOSD );
+    // G4String CYGNOSDname = "CYGNO/CYGNOSD";
+    // CYGNOSD = new CYGNOSensitiveDetector( CYGNOSDname );
+    // SDmanager->AddNewDetector( CYGNOSD );
 	
 	
     G4NistManager * nist_manager = G4NistManager::Instance();
@@ -833,7 +833,7 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     G4cout<<"Placement of Laboratory in the World ended"<<G4endl;
     
     //======= Sensitive detector ========
-    CYGNO_log->SetSensitiveDetector(CYGNOSD);
+    // CYGNO_log->SetSensitiveDetector(CYGNOSD);
  
     //======= Save volumes mass and density ======
     
@@ -907,8 +907,8 @@ void CYGNODetectorConstruction::UpdateGeometry()
   CYGNOProperties->Refresh();
 
   //Removing sensitive detectors
-  CYGNO_log->SetSensitiveDetector(0);
-  CYGNO_log=0;
+  // CYGNO_log->SetSensitiveDetector(0);
+  // CYGNO_log=0;
 
   //Deleting all the solids, logical and physical objects
   //G4RunManager::GetRunManager()->ReinitializeGeometry(true);
@@ -975,5 +975,20 @@ void CYGNODetectorConstruction::UpdateGeometryPath(G4String newpath)
   G4cout << "Updating the Geometry path to "<< newpath << G4endl;
   SetGeomPath(newpath); 
 }
+
+void CYGNODetectorConstruction::ConstructSDandField()
+{
+  // G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+
+  //
+  // Sensitive detectors
+  //
+  auto cygnoSD
+    = new CYGNOSensitiveDetector("cygnoSD");
+  G4SDManager::GetSDMpointer()->AddNewDetector(cygnoSD);
+  SetSensitiveDetector("CYGNO_log",cygnoSD);
+
+}
+
 
 

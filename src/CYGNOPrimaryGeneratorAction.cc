@@ -38,28 +38,29 @@ CYGNOPrimaryGeneratorAction::~CYGNOPrimaryGeneratorAction()
 {
   //delete fMessenger;
   delete particleGun;
-  // inputFile.close();
 }
 
 void CYGNOPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-  G4int numParticles=1;
-  particleGun->SetNumberOfParticles(numParticles);
-
-  // Read position from binary file
-  // G4ThreeVector position;
-  // double x, y, z;
-
-  // inputFile.read(reinterpret_cast<char*>(&x), sizeof(double));
-  // inputFile.read(reinterpret_cast<char*>(&y), sizeof(double));
-  // inputFile.read(reinterpret_cast<char*>(&z), sizeof(double));
-
-  // Set position dynamically in GPS
-  // position.set(x, y, z);
-  // particleGun->SetParticlePosition(position);
+  energy_pri = 0.;
 
   // Generate primary vertex
   particleGun->GeneratePrimaryVertex(anEvent);
+
+  // Access particle energy
+  energy_pri = particleGun->GetParticleEnergy();
+
+  // Access particle position
+  G4ThreeVector particlePosition = particleGun->GetParticlePosition();
+  
+  //Fill ntuple #1
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleDColumn(1,0,energy_pri);
+  man->FillNtupleDColumn(1,1,particlePosition[0]);
+  man->FillNtupleDColumn(1,2,particlePosition[1]);
+  man->FillNtupleDColumn(1,3,particlePosition[2]);
+  man->AddNtupleRow(1);
+
 }
 
 void CYGNOPrimaryGeneratorAction::SetFilename(const G4String& newFilename) {
@@ -70,5 +71,13 @@ void CYGNOPrimaryGeneratorAction::SetFilename(const G4String& newFilename) {
       G4Exception("CYGNOPrimaryGeneratorAction::SetFilename",
                   "FileOpenError", FatalException, "Failed to open binary file.");
   }
+}
+
+G4double CYGNOPrimaryGeneratorAction::GetEnergyPrimary() const {
+  return particleGun->GetParticleEnergy();
+}
+
+G4ThreeVector CYGNOPrimaryGeneratorAction::GetPrimaryVertexPosition() const {
+  return particleGun->GetParticlePosition();
 }
 
