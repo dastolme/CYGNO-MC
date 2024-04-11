@@ -8,6 +8,7 @@ class CYGNODetectorConstructionMessenger;
 class G4VSolid;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class G4UnionSolid;
 
 // CADMESH //
 #include "CADMesh.hh"
@@ -94,6 +95,17 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     G4String Mat2;
     G4String Mat3;
 
+    // Shielding dimensions
+    G4double layerThickness_ = 20.0 * mm;
+    int numLayers_ = 5;
+    G4double internal_x_ = 2160.0 * mm;
+    G4double internal_y_ = 1000.0 * mm;
+    G4double internal_z_ = 900.0 * mm;
+
+    // Private members for shielding construction
+    std::vector<G4VSolid*> layerSolids_;
+    std::vector<G4LogicalVolume*> layerLogical_;
+    std::vector<G4VPhysicalVolume*> layerPhysical_;
 
     //CADMesh
     CADMesh* mesh_water_shield;
