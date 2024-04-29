@@ -95,6 +95,17 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     G4String Mat2;
     G4String Mat3;
 
+    // Acrylic dimensions
+    G4double x_outer_acrylic_ = 1164. * mm;
+    G4double y_outer_acrylic_ = 1000. * mm; // a bit less than TDR to avoid overlaps
+    G4double z_outer_acrylic_ = 735. * mm;
+    G4double thickness_acrylic_ = 20. * mm;
+
+    // Private members for shielding and acrylic box construction
+    std::vector<G4VSolid*> acrylicSolids_;
+    std::vector<G4LogicalVolume*> acrylicLogical_;
+    std::vector<G4VPhysicalVolume*> acrylicPhysical_;
+
     // Shielding dimensions
     G4double layerThickness_ = 20.0 * mm;
     int numLayers_ = 5;

@@ -43,6 +43,7 @@
 #include "CYGNODetectorProperty.hh"
 #include "CYGNOSensitiveDetector.hh"
 #include "CYGNOVolumes.hh"
+#include "G4UnitsTable.hh"
 
 CYGNODetectorConstruction::CYGNODetectorConstruction() :
    CYGNOGeomPath("../geometry/cygno_04_v2/"),
@@ -367,6 +368,34 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
       AirBox = new G4Box(name_solid,0.5*AirBox_x,0.5*AirBox_y,0.5*AirBox_z);
       AirBox_log = new G4LogicalVolume(AirBox,CYGNOMaterials->Material("Air"),name_log,0,0,0);
 
+      // ACRYLIC BOX LOGICAL VOLUME DEFINITION
+      // Define thickness
+      G4double thickness_acrylic = thickness_acrylic_;
+
+      // Define the outer dimensions of the acrylic box
+      G4double x_outer_acrylic = x_outer_acrylic_;
+      G4double y_outer_acrylic = y_outer_acrylic_;
+      G4double z_outer_acrylic = z_outer_acrylic_;
+
+      // Define the inner dimensions of the acrylic box
+      G4double x_inner_acrylic = x_outer_acrylic - 2 * thickness_acrylic;
+      G4double y_inner_acrylic = y_outer_acrylic - 2 * thickness_acrylic;
+      G4double z_inner_acrylic = z_outer_acrylic - 2 * thickness_acrylic;
+
+      // Create solid boxes for the outer and inner acrylic boxes
+      G4Box* solid_outer_acrylic = new G4Box("OuterBox_Acrylic", 0.5 * x_outer_acrylic, 0.5 * y_outer_acrylic, 0.5 * z_outer_acrylic);
+      G4Box* solid_inner_acrylic = new G4Box("InnerBox_Acrylic", 0.5 * x_inner_acrylic, 0.5 * y_inner_acrylic, 0.5 * z_inner_acrylic);
+
+      // Subtract inner box from outer box to create the hollow space
+      G4SubtractionSolid* solid_hollow_box_acrylic = new G4SubtractionSolid("HollowBox_Acrylic", solid_outer_acrylic, solid_inner_acrylic);
+
+      // Create a logical volume for the hollow acrylic box
+      G4LogicalVolume* logic_hollow_box_acrylic = new G4LogicalVolume(solid_hollow_box_acrylic, CYGNOMaterials->Material("Perspex"), "HollowBox_Acrylic_LV");
+
+      // Add the logical volume to the vector
+      acrylicLogical_.push_back(logic_hollow_box_acrylic);
+
+      // COPPER SHIELDING
       // Define layer thicknesses
       G4double layerThickness = layerThickness_;
 
@@ -383,35 +412,85 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
 
       // Create and collect the solids for each layer
       for (int i = 0; i < numLayers; ++i) {
-          G4String layerName = "CuLayer_" + std::to_string(i);
-          
-          // Calculate dimensions for the outer and inner boxes
-          G4double outer_x = 0.5 * internal_x + (2.0 * (i + 1)) * cm;
-          G4double outer_y = 0.5 * internal_y + (2.0 * (i + 1)) * cm;
-          G4double outer_z = 0.5 * internal_z + (2.0 * (i + 1)) * cm;
+        G4String layerName = "CuLayer_" + std::to_string(i);
+        
+        // Calculate dimensions for the outer and inner boxes
+        G4double outer_x = 0.5 * internal_x + (2.0 * (i + 1)) * cm;
+        G4double outer_y = 0.5 * internal_y + (2.0 * (i + 1)) * cm;
+        G4double outer_z = 0.5 * internal_z + (2.0 * (i + 1)) * cm;
 
-          G4double inner_x = 0.5 * internal_x + (2.0 * i) * cm;
-          G4double inner_y = 0.5 * internal_y + (2.0 * i) * cm;
-          G4double inner_z = 0.5 * internal_z + (2.0 * i) * cm;
+        G4double inner_x = 0.5 * internal_x + (2.0 * i) * cm;
+        G4double inner_y = 0.5 * internal_y + (2.0 * i) * cm;
+        G4double inner_z = 0.5 * internal_z + (2.0 * i) * cm;
 
-          // Create outer and inner boxes
-          G4Box* outerBox = new G4Box(layerName + "_outer_solid", outer_x, outer_y, outer_z);
-          G4Box* innerBox = new G4Box(layerName + "_inner_solid", inner_x, inner_y, inner_z);
-          
-          // Create the subtraction solid
-          G4SubtractionSolid* layerBox = new G4SubtractionSolid(layerName + "_hollow_solid", outerBox, innerBox);
+        // Calculate thickness of the layer
+        G4double layerThickness = outer_x - inner_x;
 
-          // Create a logical volume for the layer using the solid
-          G4LogicalVolume* layerLogical = new G4LogicalVolume(layerBox, nist_manager->FindOrBuildMaterial("G4_Cu"), layerName + "_logical", 0, 0, 0);
+        // Create outer and inner boxes
+        G4Box* outerBox = new G4Box(layerName + "_outer_solid", outer_x, outer_y, outer_z);
+        G4Box* innerBox = new G4Box(layerName + "_inner_solid", inner_x, inner_y, inner_z);
 
-          // Set the color for the layer to copper
-          G4VisAttributes* layerVisAtt = new G4VisAttributes(G4Colour(0.72, 0.45, 0.2)); // Copper color
-          layerLogical->SetVisAttributes(layerVisAtt);
+        // Create a rotation matrix to orient the tube correctly
+        G4RotationMatrix* rotation = new G4RotationMatrix();
+        rotation->rotateY(90.0 * degree);
 
-          // Add the layer solid, logical volume, and physical volume to their respective collections
-          layerSolids_.push_back(layerBox);
-          layerLogical_.push_back(layerLogical);
-      }
+        // Create air tubes inside the copper layer
+        G4double tubeRadius = 90.0 * mm; // Radius of the tube
+        G4double tubeLength = layerThickness; // Length of the tube same as the thickness of the layer
+        G4double offset = 266.7 * mm; // Offset for the upper series of holes
+        
+        // Positive x side holes without offset
+        G4ThreeVector tubePositionNoOffsetPos(outer_x - (tubeLength / 2), 0, 0); 
+        G4ThreeVector tubePositionNegNoOffsetPos(-(outer_x - (tubeLength / 2)), 0, 0); 
+        
+        // Positive x side holes with offset
+        G4ThreeVector tubePositionPosOffsetPos(outer_x - (tubeLength / 2), offset, 0); 
+        G4ThreeVector tubePositionNegOffsetPos(-(outer_x - (tubeLength / 2)), offset, 0); 
+        
+        // Negative x side holes without offset
+        G4ThreeVector tubePositionNoOffsetNeg(-(outer_x - (tubeLength / 2)), 0, 0); 
+        G4ThreeVector tubePositionNegNoOffsetNeg(outer_x - (tubeLength / 2), 0, 0); 
+        
+        // Negative x side holes with offset
+        G4ThreeVector tubePositionPosOffsetNeg(outer_x - (tubeLength / 2), -offset, 0); 
+        G4ThreeVector tubePositionNegOffsetNeg(-(outer_x - (tubeLength / 2)), -offset, 0); 
+        
+        // Create the solid for the air tubes
+        G4Tubs* airTube = new G4Tubs(layerName + "_air_tube_solid", 0, tubeRadius, tubeLength / 2.0, 0, 2 * pi);
+
+        // Create a logical volume for the air tubes
+        G4LogicalVolume* airTubeLogical = new G4LogicalVolume(airTube, nist_manager->FindOrBuildMaterial("G4_AIR"), layerName + "_air_tube_logical", 0, 0, 0);
+
+        // Set the color for the air tubes (optional)
+        G4VisAttributes* tubeVisAtt = new G4VisAttributes(G4Colour(0.72, 0.45, 0.2)); // Copper color
+        airTubeLogical->SetVisAttributes(tubeVisAtt);
+
+        // Create a subtraction solid for the copper layer with the air tubes
+        G4SubtractionSolid* layerWithAirTubes = new G4SubtractionSolid(layerName + "_layer_with_air_tubes", outerBox, innerBox);
+
+        // Create a logical volume for the copper layer using the solid
+        G4LogicalVolume* layerLogical = new G4LogicalVolume(layerWithAirTubes, nist_manager->FindOrBuildMaterial("G4_Cu"), layerName + "_logical", 0, 0, 0);
+
+        // Set the color for the copper layer
+        G4VisAttributes* layerVisAtt = new G4VisAttributes(G4Colour(0.72, 0.45, 0.2)); // Copper color
+        layerLogical->SetVisAttributes(layerVisAtt);
+
+        // Place the air tubes inside the copper layer on the positive x side
+        G4PVPlacement* airTubePlacementNoOffsetPos = new G4PVPlacement(rotation, tubePositionNoOffsetPos, airTubeLogical, layerName + "_air_tube_physical_no_offset_pos", layerLogical, false, 0);
+        G4PVPlacement* airTubePlacementPosOffsetPos = new G4PVPlacement(rotation, tubePositionPosOffsetPos, airTubeLogical, layerName + "_air_tube_physical_pos_offset_pos", layerLogical, false, 0);
+        
+        // Place the air tubes inside the copper layer on the negative x side
+        G4PVPlacement* airTubePlacementNoOffsetNeg = new G4PVPlacement(rotation, tubePositionNoOffsetNeg, airTubeLogical, layerName + "_air_tube_physical_no_offset_neg", layerLogical, false, 0);
+        G4PVPlacement* airTubePlacementPosOffsetNeg = new G4PVPlacement(rotation, tubePositionPosOffsetNeg, airTubeLogical, layerName + "_air_tube_physical_pos_offset_neg", layerLogical, false, 0);
+        
+        // Place the air tubes inside the copper layer on the positive x side with negative offset
+        G4PVPlacement* airTubePlacementNegOffsetPos = new G4PVPlacement(rotation, tubePositionNegOffsetPos, airTubeLogical, layerName + "_air_tube_physical_neg_offset_pos", layerLogical, false, 0);
+        G4PVPlacement* airTubePlacementNegOffsetNeg = new G4PVPlacement(rotation, tubePositionNegOffsetNeg, airTubeLogical, layerName + "_air_tube_physical_neg_offset_neg", layerLogical, false, 0);
+
+        // Add the layer solid, logical volume, and physical volume to their respective collections
+        layerSolids_.push_back(layerWithAirTubes);
+        layerLogical_.push_back(layerLogical);
+    }
 
       Shielding_log=AirBox_log;
       size_Shielding=G4ThreeVector(AirBox_x/2.,AirBox_y/2.,AirBox_z/2.);
@@ -699,12 +778,12 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     }
 
     //TPC gas
-    // G4double TPC_x = 1160.*mm;
-    // G4double TPC_y = 960*mm;
-    // G4double TPC_z = 650*mm;
-    G4double TPC_x = internal_x_;
-    G4double TPC_y = internal_y_;
-    G4double TPC_z = internal_z_;
+    // G4double TPC_x = 1160. * mm;
+    // G4double TPC_y = 960 * mm;
+    // G4double TPC_z = 650 * mm;
+    G4double TPC_x = x_outer_acrylic_ - 2 * thickness_acrylic_;
+    G4double TPC_y = y_outer_acrylic_ - 2 * thickness_acrylic_;
+    G4double TPC_z = z_outer_acrylic_ - 2 * thickness_acrylic_;
       
     name_phys="TPC";
     name_log=name_phys+"_log";
@@ -807,6 +886,24 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
         //         cad_pmts_logical,"cad_pmts_physical", AirBox_log, false, 0, true);
       }
 
+      // Place the acrylic box
+      if (!acrylicLogical_.empty()) {
+          // Assuming you want to place the first (and only) acrylic box stored in acrylicLogical_ vector
+          G4LogicalVolume* acrylicBox_log = acrylicLogical_[0]; // Retrieve the logical volume of the acrylic box
+          if (acrylicBox_log) {
+              G4VPhysicalVolume* acrylicPhysical = new G4PVPlacement(G4Transform3D(), acrylicBox_log, "HollowBox_Acrylic", AirBox_log, false, 0, true);
+              acrylicPhysical_.push_back(acrylicPhysical);
+          } else {
+              // Handle the case where the logical volume is nullptr
+              G4cerr << "Error: Logical volume of acrylic box is nullptr!" << G4endl;
+              // You may choose to handle this error condition based on your application's requirements
+          }
+      } else {
+          // Handle the case where the acrylicLogical_ vector is empty
+          G4cerr << "Error: No logical volumes found for the acrylic box!" << G4endl;
+          // You may choose to handle this error condition based on your application's requirements
+      }
+
       // Place the shielding layers
       G4double totalThickness = numLayers_ * layerThickness_;
 
@@ -854,14 +951,14 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
         //   	    cad_internal_structure_logical,"cad_internal_structure_physical", TPC_log, false, 0, true);
         // cad_fc_sheet_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
         //   	    cad_fc_sheet_logical,"cad_fc_sheet_physical", TPC_log, false, 0, true);
-        // cad_gem_frame_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-        //   	    cad_gem_frame_logical,"cad_gem_frame_physical", TPC_log, false, 0, true);
-        // cad_gem_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-        //   	    cad_gem_logical,"cad_gem_physical", TPC_log, false, 0, true);
-        // cad_cathode_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-        //   	    cad_cathode_logical,"cad_cathode_physical", TPC_log, false, 0, true);
-        // cad_cathode_frame_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
-        //   	    cad_cathode_frame_logical,"cad_cathode_frame_physical", TPC_log, false, 0, true);
+        cad_gem_frame_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+          	    cad_gem_frame_logical,"cad_gem_frame_physical", TPC_log, false, 0, true);
+        cad_gem_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+          	    cad_gem_logical,"cad_gem_physical", TPC_log, false, 0, true);
+        cad_cathode_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+          	    cad_cathode_logical,"cad_cathode_physical", TPC_log, false, 0, true);
+        cad_cathode_frame_physical = new G4PVPlacement(G4Transform3D(rot_cad,tr_cad), 
+          	    cad_cathode_frame_logical,"cad_cathode_frame_physical", TPC_log, false, 0, true);
     } 
     //CYGNO sensitive regions
     tr_CYGNO_gas_0=G4ThreeVector(-10-CYGNO_x/2.,0.,0.);
