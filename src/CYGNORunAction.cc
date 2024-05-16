@@ -70,6 +70,13 @@ void CYGNORunAction::Book() {
   man->CreateNtupleDColumn("firstparticleID");
   man->FinishNtuple();
 
+  // ---- tertiary ntuple ------   
+  //id==3
+  man->CreateNtuple("tree3", "Incoming particle Info");
+  man->CreateNtupleSColumn("particle_name");
+  man->CreateNtupleDColumn("energy");
+  man->FinishNtuple();
+
   // Open an output file
   man->OpenFile(FileName);
 
