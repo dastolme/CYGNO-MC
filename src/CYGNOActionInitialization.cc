@@ -31,6 +31,7 @@
 #include "CYGNOEventAction.hh"
 #include "CYGNOSteppingAction.hh"
 #include "CYGNOStackingAction.hh"
+#include "CYGNOPrimaryGeneratorActionMessanger.hh"
 //#include "CYGNOTrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +49,9 @@ CYGNOActionInitialization::~CYGNOActionInitialization()
 
 void CYGNOActionInitialization::BuildForMaster() const
 {
-  CYGNORunAction* run_action = new CYGNORunAction(fDetector);
+  CYGNOEventAction* event_action = new CYGNOEventAction(fDetector);
+
+  CYGNORunAction* run_action = new CYGNORunAction(event_action, fDetector);
   SetUserAction(run_action);
 }
 
@@ -60,11 +63,13 @@ void CYGNOActionInitialization::Build() const
   CYGNOPrimaryGeneratorAction* gen_action = new CYGNOPrimaryGeneratorAction(fDetector);
   SetUserAction(gen_action);
 
-  CYGNORunAction* run_action = new CYGNORunAction(fDetector);
-  SetUserAction(run_action);
+  CYGNOPrimaryGeneratorActionMessenger* mess_action = new CYGNOPrimaryGeneratorActionMessenger(gen_action);
   
-  CYGNOEventAction* event_action = new CYGNOEventAction(run_action,fDetector);
+  CYGNOEventAction* event_action = new CYGNOEventAction(fDetector);
   SetUserAction(event_action);
+
+  CYGNORunAction* run_action = new CYGNORunAction(event_action, fDetector);
+  SetUserAction(run_action);
   
   CYGNOSteppingAction* stepping_action = new CYGNOSteppingAction(fDetector);// ,event_action);
   SetUserAction(stepping_action);

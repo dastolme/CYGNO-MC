@@ -16,7 +16,7 @@
 /gps/pos/halfz 1.1 m
 # 
 /gps/pos/type Volume
-/gps/pos/confine cad_cu_shield0_physical
+/gps/pos/confine CuLayer_4
 #
 #Save only events that pass that have hits in the sensitive gas
 /CYGNO/cutoutfile 1
@@ -30,9 +30,9 @@
 /tracking/verbose 0
 #/CYGNO/reportingfrequency 10000
 #Output file name
-/CYGNO/outfile k40_shield0_Cu
+/CYGNO/outfile k40_CuLayer_4
 /random/setSeeds 575841909 838392975
 #/process/em/deexcitationIgnoreCut true
 
 # define number of events to be generated
-/run/beamOn 10000000
+/run/beamOn 10000

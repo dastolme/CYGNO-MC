@@ -30,7 +30,6 @@
 #include "G4DecayPhysics.hh"//Already included in any physics list
 #include "G4RadioactiveDecayPhysics.hh"//Already included in Shielding
 #include "G4OpticalPhysics.hh" //this is for scintillation light: eV energies
-//#include "CYGNOTritiumPhysics.hh" //this is the class to make the tritium decay
 
 //EM lists
 #include "G4EmStandardPhysics.hh"

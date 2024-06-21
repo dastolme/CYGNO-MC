@@ -12,7 +12,6 @@ class CYGNOStackingAction : public G4UserStackingAction
      
     virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);        
   private:
-  void SaveIsotope(const G4Track*);
 
 };
 

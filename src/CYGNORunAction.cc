@@ -1,12 +1,13 @@
 #include "CYGNORunAction.hh"
+#include "CYGNOEventAction.hh"
 #include "CYGNORunActionMessenger.hh"
-#include "CYGNOAnalysis.hh"
 #include "CYGNODetectorConstruction.hh"
+#include "G4AnalysisManager.hh"
+#include "G4Run.hh"
 
-#include "CYGNORun.hh"
 
-CYGNORunAction::CYGNORunAction(CYGNODetectorConstruction* myDC)
-  : G4UserRunAction(), fDetector(myDC) 
+CYGNORunAction::CYGNORunAction(CYGNOEventAction* myEA, CYGNODetectorConstruction* myDC)
+  : G4UserRunAction(), fDetector(myDC), fEventAction(myEA)
 {
   fMessenger = new CYGNORunActionMessenger(this);
 }
@@ -36,10 +37,6 @@ void CYGNORunAction::EndOfRunAction(const G4Run* run)
   man->CloseFile();
 }
 
-G4Run* CYGNORunAction::GenerateRun() {
-    return new CYGNORun;
-}
-
 void CYGNORunAction::Book() {
   
   // Get/create analysis manager
@@ -62,21 +59,22 @@ void CYGNORunAction::Book() {
 
   // ---- secondary ntuple ------   
   //id==2
-  man->CreateNtuple("tree2", "Hits Info");
-  man->CreateNtupleDColumn("Event");
-  man->CreateNtupleDColumn("energy_pri");
-  man->CreateNtupleDColumn("e_dep");
-  man->CreateNtupleDColumn("e_dep_NR");
-  man->CreateNtupleDColumn("firstparticleID");
-  man->FinishNtuple();
-
-  // ---- tertiary ntuple ------   
-  //id==3
-  man->CreateNtuple("tree3", "Incoming particle Info");
-  man->CreateNtupleIColumn("particleID");
-  man->CreateNtupleDColumn("energy");
-  man->CreateNtupleDColumn("theta");
-  man->CreateNtupleDColumn("phi");
+  man->CreateNtuple("nTuple", "Hits Info");
+  man->CreateNtupleIColumn("eventnumber");
+  man->CreateNtupleIColumn("numhits");
+  man->CreateNtupleDColumn("ekin_particle");
+  man->CreateNtupleIColumn("particle_type");
+  man->CreateNtupleDColumn("energyDep");
+  man->CreateNtupleDColumn("energyDep_NR");
+  man->CreateNtupleIColumn("pdgID_hits", fEventAction -> Get_pdgID_hits());
+  man->CreateNtupleDColumn("tracklen_hits", fEventAction -> Get_tracklen_hits());
+  man->CreateNtupleDColumn("px_particle", fEventAction -> Get_px_particle());
+  man->CreateNtupleDColumn("py_particle", fEventAction -> Get_py_particle());
+  man->CreateNtupleDColumn("pz_particle", fEventAction -> Get_pz_particle());
+  man->CreateNtupleDColumn("energyDep_hits", fEventAction -> Get_energyDep_hits());
+  man->CreateNtupleDColumn("x_hits", fEventAction -> Get_x_hits());
+  man->CreateNtupleDColumn("y_hits", fEventAction -> Get_y_hits());
+  man->CreateNtupleDColumn("z_hits", fEventAction -> Get_z_hits());
   man->FinishNtuple();
 
   // Open an output file

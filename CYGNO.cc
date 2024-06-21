@@ -17,9 +17,6 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
-#include "TROOT.h"
-#include "TThread.h"
-
 int main(int argc,char** argv)
 {
   
@@ -52,13 +49,6 @@ int main(int argc,char** argv)
   CYGNODetectorConstruction* detector = new CYGNODetectorConstruction;
   runManager->SetUserInitialization(detector);
 
-// #ifdef G4VIS_USE
-  // visualization manager
-  //
-//   G4VisManager* visManager = new G4VisExecutive;
-//   visManager->Initialize();
-// #endif
-
   // PHYSICS
   // CYGNO physics list is the Shielding physics list with the addition of emlists option4 and of fluo,PIXE,Auger. In a second moment we can add the optical photons and simulate the scintillation
   // For the study of systematics, change Shielding to QGSP_BERT_HP and QGSP_BIC_HP, and the option4 to livermore and penelope.
@@ -67,11 +57,6 @@ int main(int argc,char** argv)
    
   // User Action classes
   runManager->SetUserInitialization(new CYGNOActionInitialization(detector));
-
-  // Create your custom primary generator action with the binary file name
-  // CYGNOPrimaryGeneratorAction* myGeneratorAction = new CYGNOPrimaryGeneratorAction(detector);
-  // Set the filename for the binary file
-  // customGenerator->SetFilename("output_binary.dat");
   
   // Create your custom primary generator action with the binary file name
   // runManager->SetUserAction(myGeneratorAction);
@@ -108,15 +93,15 @@ int main(int argc,char** argv)
      UImanager->ApplyCommand(command+fileName);
     }
 
-//Stop the benchmark here
-theTimer->Stop();
-G4cout << "The simulation took: " << theTimer->GetRealElapsed() << " s to run (real time)" << G4endl;
+  //Stop the benchmark here
+  theTimer->Stop();
+  G4cout << "The simulation took: " << theTimer->GetRealElapsed() << " s to run (real time)" << G4endl;
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
   //delete analysis;
-  //delete runManager;
+  delete runManager;
   //  delete verbosity;
 
   return 0;

@@ -10,6 +10,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4UnionSolid;
 
+
 // CADMESH //
 #include "CADMesh.hh"
 
@@ -25,6 +26,7 @@ class CYGNOSensitiveDetector;
 
 #include "G4Track.hh"
 #include "G4DynamicParticle.hh"
+#include "G4IStore.hh" 
 
 
 class CYGNODetectorConstruction : public G4VUserDetectorConstruction
@@ -34,11 +36,12 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     CYGNODetectorConstruction();
     ~CYGNODetectorConstruction();
 
-    G4VPhysicalVolume* Construct();
+    G4VPhysicalVolume* Construct() override;
     void SaveMassAndDensity();
     void UpdateGeometry();
     void UpdateGeometryPath(G4String newpath);
     void ConstructSDandField() override;
+    G4IStore* CreateImportanceStore();
 
     void SetExternalRockThickness(G4double rockthick) {rockThicknessOuter = rockthick;}
     void SetProductionRockThickness(G4double rockthick) {productionLayerThickness = rockthick;}
@@ -97,9 +100,9 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
 
     // Acrylic dimensions
     G4double x_outer_acrylic_ = 1164. * mm;
-    G4double y_outer_acrylic_ = 1000. * mm; // a bit less than TDR to avoid overlaps
+    G4double y_outer_acrylic_ = 1000. * mm; 
     G4double z_outer_acrylic_ = 735. * mm;
-    G4double thickness_acrylic_ = 20. * mm;
+    G4double thickness_acrylic_ = 40. * mm;
 
     // Private members for shielding and acrylic box construction
     std::vector<G4VSolid*> acrylicSolids_;

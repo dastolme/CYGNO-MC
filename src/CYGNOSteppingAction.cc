@@ -57,23 +57,6 @@ void CYGNOSteppingAction::UserSteppingAction(const G4Step* fStep)
         if (volumeName == "CYGNO_log") {
             // Perform your actions here, e.g., logging or counting
             G4cout << "Gamma particle entered volume: CYGNO_log" << G4endl;
-
-            // Retrieve the momentum direction
-            G4ThreeVector momentumDirection = track->GetMomentumDirection();
-            
-            // Calculate the polar angle (theta) with respect to the z-axis
-            double theta = momentumDirection.theta(); // angle in radians
-            
-            // Calculate the azimuthal angle (phi) in the x-y plane from the x-axis
-            double phi = momentumDirection.phi(); // angle in radians
-            
-            G4AnalysisManager* man = G4AnalysisManager::Instance();
-            //Fill ntuple #3
-            man->FillNtupleIColumn(3,0,particleID);
-            man->FillNtupleDColumn(3,1,energyKeV);
-            man->FillNtupleDColumn(3, 2, theta); // New column for theta in radians
-            man->FillNtupleDColumn(3, 3, phi); // New column for phi in radians
-            man->AddNtupleRow(3);
         }
     }
 }

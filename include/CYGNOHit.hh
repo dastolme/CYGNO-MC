@@ -7,6 +7,10 @@
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
+// Forward declaration of the allocator class
+template <class T>
+class G4Allocator;
+
 class CYGNOHit : public G4VHit
 {
   public:
@@ -24,16 +28,17 @@ class CYGNOHit : public G4VHit
       void Print();
 
   public:
-      void SetParentID  (G4int pid)      { parentID = pid; };
+      void SetParentID    (G4int pid)      { parentID = pid; };
       void SetParticleID  (G4int partID)      { particleID = partID; };
-      void SetTrackID  (G4int track)      { trackID = track; };
+      void SetTrackID     (G4int track)      { trackID = track; };
       void SetGlobalTime  (G4double gtime)      { globalTime = gtime; };
       void SetKineticEne  (G4double kene)      { kinEne = kene; };
       void SetProcessIni  (G4String prini)      { processIni = prini; };
       void SetProcessFin  (G4String prfin)      { processFin = prfin; };
-      void SetEdep     (G4double de)      { edep = de; };
-      void SetPos      (G4ThreeVector xyz){ pos = xyz; };
+      void SetEdep        (G4double de)      { edep = de; };
+      void SetPos         (G4ThreeVector xyz){ pos = xyz; };
       void SetLength      (G4double len){ trackLen = len; };
+      void SetMom         (G4ThreeVector pxpypz){ momentum = pxpypz; };
  
       G4int GetParentID() { return parentID; };
       G4int GetParticleID() { return particleID; };
@@ -45,19 +50,21 @@ class CYGNOHit : public G4VHit
       G4double GetEdep()    { return edep; };      
       G4ThreeVector GetPos(){ return pos; };
       G4double GetLength(){ return trackLen; };
+      G4ThreeVector GetMom(){ return momentum; };
        
   private:
  
       G4int         parentID;
       G4int         particleID;
       G4int         trackID;
-      G4double globalTime;
-      G4double kinEne;
-      G4String processIni;
-      G4String processFin;
+      G4double      globalTime;
+      G4double      kinEne;
+      G4String      processIni;
+      G4String      processFin;
       G4double      edep;
       G4ThreeVector pos;
       G4double      trackLen;
+      G4ThreeVector momentum;
  };
 
 typedef G4THitsCollection<CYGNOHit> CYGNOHitsCollection;
@@ -66,11 +73,9 @@ extern G4ThreadLocal G4Allocator<CYGNOHit>* CYGNOHitAllocator;
 
 inline void* CYGNOHit::operator new(size_t)
 {
-  if(!CYGNOHitAllocator) CYGNOHitAllocator = new G4Allocator<CYGNOHit>;
-  return (void *) CYGNOHitAllocator->MallocSingle();
-  //void *aHit;
-  //aHit = (void *) CYGNOHitAllocator.MallocSingle();
-  //return aHit;
+  if (!CYGNOHitAllocator) CYGNOHitAllocator = new G4Allocator<CYGNOHit>;
+  void* aHit = (void*)CYGNOHitAllocator->MallocSingle();
+  return aHit;
 }
 
 inline void CYGNOHit::operator delete(void *aHit)

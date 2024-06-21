@@ -81,7 +81,6 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     PyrexGlass->AddMaterial (K, fractionmass = 0.00332099);
 
 
-
     //Hamamatsu R5912 uses Borosilicate glass.
     //Cribbed properties from:
     //http://www.schott.com/d/tubing/9a0f5126-6e35-43bd-bf2a-349912caf9f2/schott-algae-brochure-borosilicate.pdf 
@@ -138,32 +137,34 @@ void CYGNODetectorMaterial::ConstructMaterials(){
 
 
     // SF6_gas 
-
     density = 156.14*g/m3; //sf6 20 torr
     pressure = 0.0263158*atmosphere; //sf6 20 torr
-    SF6_gas = new G4Material(name="SF6_gas", density, ncomponents=2, kStateGas, temperature,pressure);
+    SF6_gas = new G4Material(name="SF6_gas", density, ncomponents=2, kStateGas, temperature, pressure);
     SF6_gas->AddElement(elS, natoms =1);
     SF6_gas->AddElement(elF, natoms =6);
 
     G4double He_frac = gasHeFrac;
     G4double CF4_frac = gasCF4Frac;
 
+    // LNGS pressure correction
+    G4double LNGS_pressure = 0.888231 * atmosphere;
+
     //He_gas
-    density = 162.488*He_frac*g/m3;
-    pressure = 1*He_frac*atmosphere;
-    He_gas = new G4Material(name="He_gas", density, ncomponents=1, kStateGas, temperature,pressure);
+    density = 162.488 * He_frac * g/m3;
+    pressure = LNGS_pressure * He_frac;
+    He_gas = new G4Material(name="He_gas", density, ncomponents=1, kStateGas, temperature, pressure);
     He_gas->AddElement(elHe, natoms=1);
 
     //CF4_gas
-    density = 3574.736*CF4_frac*g/m3;
-    pressure = 1*CF4_frac*atmosphere;
+    density = 3574.736 * CF4_frac * g/m3;
+    pressure = LNGS_pressure * CF4_frac;
     CF4_gas = new G4Material(name="CF4_gas", density, ncomponents=2, kStateGas, temperature, pressure);
     CF4_gas->AddElement(elC, natoms=1);
     CF4_gas->AddElement(elF, natoms=4);
 
     //CYGNO_gas
-    density = He_gas->GetDensity()+CF4_gas->GetDensity();
-    pressure = He_gas->GetPressure()+CF4_gas->GetPressure();
+    density = He_gas->GetDensity() + CF4_gas->GetDensity();
+    pressure = He_gas->GetPressure() + CF4_gas->GetPressure();
     CYGNO_gas = new G4Material(name="CYGNO_gas", density, ncomponents=2, kStateGas, temperature, pressure);
     CYGNO_gas->AddMaterial(He_gas, fractionmass = He_gas->GetDensity()/density*100*perCent);
     CYGNO_gas->AddMaterial(CF4_gas, fractionmass = CF4_gas->GetDensity()/density*100*perCent);

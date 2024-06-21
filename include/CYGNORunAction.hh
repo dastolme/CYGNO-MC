@@ -2,24 +2,24 @@
 #define CYGNORunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "CYGNOAnalysis.hh"
 #include "globals.hh"
 
 #include <fstream>
+#include <vector>
 
 class G4Run;
 class CYGNORunActionMessenger;
 class CYGNODetectorConstruction;
+class CYGNOEventAction;
 
 class CYGNORunAction : public G4UserRunAction
 {
   public:
-  CYGNORunAction(CYGNODetectorConstruction*);
+  CYGNORunAction(CYGNOEventAction*, CYGNODetectorConstruction*);
   virtual ~CYGNORunAction();
   
   virtual void BeginOfRunAction(const G4Run*);
   virtual void EndOfRunAction(const G4Run*);
-  virtual G4Run* GenerateRun();
   
   void AddNumberOfMuonsDetector(){fNumberOfMuonsDetector++;};
   void SetOutFile(G4String fname) {FileName = fname;};
@@ -37,7 +37,8 @@ class CYGNORunAction : public G4UserRunAction
 
   void Book();
    
-  CYGNODetectorConstruction* fDetector;
+  CYGNODetectorConstruction* fDetector = nullptr;
+  CYGNOEventAction* fEventAction = nullptr;
   int fNumberOfMuonsDetector;  
   G4String FileName;  
   G4int fOutFileCut;

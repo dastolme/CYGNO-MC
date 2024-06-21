@@ -26,10 +26,9 @@ void CYGNOSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 G4bool CYGNOSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ( aStep->GetTrack()->GetDefinition()->GetParticleName() == "opticalphoton" ) {
-  //    G4cout<<"opt photon"<<G4endl;
-  // optical photon do not count as hit
-  return false;
+  if ( aStep->GetTrack()->GetDefinition()->GetParticleName() == "opticalphoton" ) 
+  {
+    return false;
   }
   
   if(edep==0.) return true;
@@ -59,10 +58,9 @@ G4bool CYGNOSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4String volumeName = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName();
   newHit->SetEdep     (edep/keV);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetMom      (aStep->GetTrack()->GetMomentum());
   CYGNOCollection->insert( newHit );
   return true;
-
-
 }
 
 void CYGNOSensitiveDetector::EndOfEvent(G4HCofThisEvent*)

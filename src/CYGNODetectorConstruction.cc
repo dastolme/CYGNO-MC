@@ -44,6 +44,7 @@
 #include "CYGNOSensitiveDetector.hh"
 #include "CYGNOVolumes.hh"
 #include "G4UnitsTable.hh"
+#include "G4IStore.hh" 
 
 CYGNODetectorConstruction::CYGNODetectorConstruction() :
    CYGNOGeomPath("../geometry/cygno_04_v2/"),
@@ -69,13 +70,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
 {
    
     UpdateGeometryPath(CYGNOGeomPath); 
-    //register the SD
-    G4SDManager* SDmanager=G4SDManager::GetSDMpointer();
-    
-    // G4String CYGNOSDname = "CYGNO/CYGNOSD";
-    // CYGNOSD = new CYGNOSensitiveDetector( CYGNOSDname );
-    // SDmanager->AddNewDetector( CYGNOSD );
-	
 	
     G4NistManager * nist_manager = G4NistManager::Instance();
    
@@ -1027,6 +1021,7 @@ void CYGNODetectorConstruction::SaveMassAndDensity()
         G4LogicalVolume* layerLogical = layerLogical_[i];
         CYGNOProperties->AddVolumeNameMassAndDensity(layerLogical);
     }
+    CYGNOProperties->AddVolumeNameMassAndDensity(acrylicLogical_[0]);
   	ifstream infile(CYGNOGeomPath.c_str());
   	if (infile.good()) {
   	  CYGNOProperties->AddVolumeNameMassAndDensity(cad_water_shield_logical);
@@ -1048,7 +1043,6 @@ void CYGNODetectorConstruction::SaveMassAndDensity()
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_cathode_frame_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_fc_sheet_logical);
   }
-  
     CYGNOProperties->AddVolumeNameMassAndDensity(AirBox_log);
     CYGNOProperties->AddVolumeNameMassAndDensity(TPC_log);
     CYGNOProperties->AddVolumeNameMassAndDensity(CYGNO_log);
@@ -1150,6 +1144,4 @@ void CYGNODetectorConstruction::ConstructSDandField()
   SetSensitiveDetector("CYGNO_log",cygnoSD);
 
 }
-
-
 

@@ -24,10 +24,8 @@ class CYGNOPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   void GeneratePrimaries(G4Event*);  
   void SetEnergy(G4double ene) {particle_energy = ene;}
   G4double GetEnergy() {return particle_energy;}
-  void SetFilename(const G4String& filename); // Method to set the filename
 
-  G4double GetEnergyPrimary() const;
-  G4ThreeVector GetPrimaryVertexPosition() const;
+  void SetFillNtuple(bool fill) { fFillNtuple = fill; }
 
   private:
   G4GeneralParticleSource* particleGun;
@@ -35,6 +33,7 @@ class CYGNOPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   G4int n_particle;
   G4double particle_energy;
 
+  bool fFillNtuple;
   G4double energy_pri;
 
   G4String filename; // Member variable to store the filename
