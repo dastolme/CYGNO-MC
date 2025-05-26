@@ -51,6 +51,9 @@ G4Material* Co;
 G4Material* Ni;
 G4Material* Si;
 G4Material* In;
+G4Material* Cd;
+G4Material* AmO2;
+G4Material* Be;
 
 G4Material* Teflon;
 G4Material* PyrexGlass;
@@ -58,6 +61,7 @@ G4Material* BSglass;
 G4Material* VetoPMTglass;
 G4Material* Quartz;
 G4Material* Ceramic;
+G4Material* AmBe;
 G4Material* Kovar;
 G4Material* lngsRock;
 G4Material* Vacuum;
