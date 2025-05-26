@@ -137,9 +137,25 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     Ceramic->AddElement (elAl, natoms = 2);
     Ceramic->AddElement (elO, natoms = 3);
 
+    //AmBe source
+        
+    //material: AmO2 0.388% in volume del mix di Am e Be (https://www.researchgate.net/publication/319436285_In-Line_a_n_Source_Sampling_Methodology_for_Monte_Carlo_Radiation_Transport_Simulations)
+
+    G4Isotope* Am241 = new G4Isotope("Am241", z=95, a=241.,241*g/mole);
+    G4Element* elAm = new G4Element("elAm241", "Am241", ncomponents = 1);
+    elAm->AddIsotope(Am241, 100.*perCent);
+    density = 11.68 * g/cm3;
+    AmO2 = new G4Material("AmO2",density,ncomponents = 2); //americium dioxide
+    AmO2->AddElement(elAm, natoms = 1);
+    AmO2->AddElement(elO, natoms = 2);
+    
+    density = 1.88 * g/cm3; //density of metallic Be 1.84g/cm3
+    AmBe = new G4Material ("AmBe", density, ncomponents = 2);
+    AmBe->AddMaterial(AmO2, fractionmass = 0.045); //about 4.5% in mass in AmO2
+    AmBe->AddMaterial(Be, fractionmass = 0.955);
+
 
     // SF6_gas 
-
     density = 156.14*g/m3; //sf6 20 torr
     pressure = 0.0263158*atmosphere; //sf6 20 torr
     SF6_gas = new G4Material(name="SF6_gas", density, ncomponents=2, kStateGas, temperature, pressure);
