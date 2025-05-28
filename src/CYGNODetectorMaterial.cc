@@ -64,6 +64,8 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     Ni = man->FindOrBuildMaterial("G4_Ni");
     Si = man->FindOrBuildMaterial("G4_Si");
     In = man->FindOrBuildMaterial("G4_In");
+    Cd = man->FindOrBuildMaterial("G4_Cd");
+    Be = man->FindOrBuildMaterial("G4_Be");
     
     Teflon  = man->FindOrBuildMaterial("G4_TEFLON");
     
@@ -107,10 +109,8 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     G4cout << "===============================" << G4endl;
 
     //
-    //Camera = FindOrBuildMaterial("G4_Pyrex_Glass");
-    Camera = FindOrBuildMaterial("G4_GLASS_PLATE");
-
-
+    // Camera = man -> FindOrBuildMaterial("G4_Pyrex_Glass");
+    Camera = man -> FindOrBuildMaterial("G4_GLASS_PLATE");
     
     //lngs rock material definition
     density = 2.71*g/cm3;
@@ -138,7 +138,7 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     Ceramic->AddElement (elO, natoms = 3);
 
     //AmBe source
-        
+
     //material: AmO2 0.388% in volume del mix di Am e Be (https://www.researchgate.net/publication/319436285_In-Line_a_n_Source_Sampling_Methodology_for_Monte_Carlo_Radiation_Transport_Simulations)
 
     G4Isotope* Am241 = new G4Isotope("Am241", z=95, a=241.,241*g/mole);
@@ -223,7 +223,24 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     Steel  = man->FindOrBuildMaterial("G4_STAINLESS-STEEL");
     PE  = man->FindOrBuildMaterial("G4_POLYETHYLENE");
     Concrete  = man->FindOrBuildMaterial("G4_CONCRETE");
-	
+
+    //Walls of underground container for LIME
+    // Polyurethane
+    PU = new G4Material("Polyurethane", density = 1100.*kg/m3, ncomponents = 4, kStateSolid);
+    PU->AddElement(elC, natoms = 3);
+    PU->AddElement(elH, natoms = 8);
+    PU->AddElement(elN, natoms = 2);
+    PU->AddElement(elO, natoms = 1);
+
+    // Polyurethane foam
+    // Combine the polyurethane with air to make foam of density 35 kg/m3
+    // 96.924 % of air + remainder polyurethane has a density of 35 kg/m3
+    PU_foam = new G4Material(name = "PolyurethaneFoam", density = 35 * kg / m3, ncomponents = 2, kStateSolid);
+    PU_foam->AddMaterial(Air, 96.924 * perCent);
+    PU_foam->AddMaterial(PU, 3.076 * perCent);
+    
+    // Polycarbonate
+    PC = man->FindOrBuildMaterial("G4_POLYCARBONATE");
     
     //**********************************************************************
     //   DEFINITION OF VISUALIZATION ATTRIBUTES
@@ -237,6 +254,7 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     CameraVis = new G4VisAttributes(G4Colour(1.,0.,1.));
     PerspexVis = new G4VisAttributes(G4Colour(0.,1.,1.));
     CYGNOGasVis = new G4VisAttributes(G4Colour(0.,1.,0.));
+    AmBeVis = new G4VisAttributes(G4Colour(1.,1.,0.));
     //CopperVis->SetForceWireframe(true);
 }
 
@@ -276,6 +294,8 @@ G4Material* CYGNODetectorMaterial::Material(G4String what)
   if(what == "Ni")                material = Ni;
   if(what == "Si")                material = Si;
   if(what == "In")                material = In;
+  if(what == "Cd")                material = Cd;
+  if(what == "AmBe")              material = AmBe;
   if(what == "Teflon")            material = Teflon;
   if(what == "PyrexGlass")        material = PyrexGlass;
   if(what == "BSglass")           material = BSglass;
@@ -293,6 +313,9 @@ G4Material* CYGNODetectorMaterial::Material(G4String what)
   if(what == "Camera")            material = Camera;
   if(what == "Kapton")            material = Kapton;
   if(what == "GEM")               material = GEM;
+  if(what == "PU")                material = PU;
+  if(what == "PU_foam")           material = PU_foam;
+  if(what == "PC")                material = PC;
  
   return material;
 }
