@@ -51,6 +51,10 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     G4Element* elCa = man->FindOrBuildElement("Ca");
     G4Element* elB = man->FindOrBuildElement("B");
     G4Element* elCu = man->FindOrBuildElement("Cu");
+    G4Element* elCd = man->FindOrBuildElement("Cd");
+    G4Element* elCr = man->FindOrBuildElement("Cr");
+    G4Element* elNi = man->FindOrBuildElement("Ni");
+    G4Element* elFe = man->FindOrBuildElement("Fe");
     
     O = man->FindOrBuildMaterial("G4_O");
     Na = man->FindOrBuildMaterial("G4_Na");
@@ -108,8 +112,7 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     G4cout << "Now cameras made of glass, need to  modify to an effective material in order to have the correct total mass" << G4endl;
     G4cout << "===============================" << G4endl;
 
-    //
-    // Camera = man -> FindOrBuildMaterial("G4_Pyrex_Glass");
+    Camera = man -> FindOrBuildMaterial("G4_Pyrex_Glass");
     Camera = man -> FindOrBuildMaterial("G4_GLASS_PLATE");
     
     //lngs rock material definition
@@ -141,17 +144,24 @@ void CYGNODetectorMaterial::ConstructMaterials(){
 
     //material: AmO2 0.388% in volume del mix di Am e Be (https://www.researchgate.net/publication/319436285_In-Line_a_n_Source_Sampling_Methodology_for_Monte_Carlo_Radiation_Transport_Simulations)
 
-    G4Isotope* Am241 = new G4Isotope("Am241", z=95, a=241.,241*g/mole);
-    G4Element* elAm = new G4Element("elAm241", "Am241", ncomponents = 1);
-    elAm->AddIsotope(Am241, 100.*perCent);
-    density = 11.68 * g/cm3;
-    AmO2 = new G4Material("AmO2",density,ncomponents = 2); //americium dioxide
-    AmO2->AddElement(elAm, natoms = 1);
-    AmO2->AddElement(elO, natoms = 2);
+    // G4Isotope* Am241 = new G4Isotope("Am241", z=95, a=241.,241*g/mole);
+    // G4Element* elAm = new G4Element("elAm241", "Am241", ncomponents = 1);
+    // elAm->AddIsotope(Am241, 100.*perCent);
+    // density = 11.68 * g/cm3;
+    // AmO2 = new G4Material("AmO2",density,ncomponents = 2); //americium dioxide
+    // AmO2->AddElement(elAm, natoms = 1);
+    // AmO2->AddElement(elO, natoms = 2);
     
+    // using Uranium because Americium not yet defined for RDM
+    G4Isotope* U235 = new G4Isotope(name="Uranium235", 92, 235, 235.0*g/mole);
+    G4Element* U = new G4Element(name="Uranium", "U", ncomponents=1);
+    U->AddIsotope(U235, 1.0);
+    G4Material* sourceAm = new G4Material(name="UraniumSource", density=13.61*g/cm3, ncomponents=1);
+    sourceAm->AddElement(U, 1);
+
     density = 1.88 * g/cm3; //density of metallic Be 1.84g/cm3
     AmBe = new G4Material ("AmBe", density, ncomponents = 2);
-    AmBe->AddMaterial(AmO2, fractionmass = 0.045); //about 4.5% in mass in AmO2
+    AmBe->AddMaterial(sourceAm, fractionmass = 0.045); //about 4.5% in mass in AmO2
     AmBe->AddMaterial(Be, fractionmass = 0.955);
 
 
@@ -216,13 +226,19 @@ void CYGNODetectorMaterial::ConstructMaterials(){
     GEM->AddMaterial(Kapton, fracMass=0.44);
     GEM->AddMaterial(Cu, fracMass=0.56);
 
-
     
     Vacuum = new G4Material("Vacuum",1.,massOfMole, density= 1.e-25*g/cm3,kStateGas,temperature, pressure);
     Water  = man->FindOrBuildMaterial("G4_WATER");
-    Steel  = man->FindOrBuildMaterial("G4_STAINLESS-STEEL");
     PE  = man->FindOrBuildMaterial("G4_POLYETHYLENE");
     Concrete  = man->FindOrBuildMaterial("G4_CONCRETE");
+
+    // Stainless steel 
+    Steel = new G4Material("Steel", density = 8.02*g/cm3, ncomponents = 5, kStateSolid);
+    Steel -> AddElement(elMn, 0.02);
+    Steel -> AddElement(elSi, 0.01);
+    Steel -> AddElement(elCr, 0.19);
+    Steel -> AddElement(elNi, 0.10);
+    Steel -> AddElement(elFe, 0.68);
 
     //Walls of underground container for LIME
     // Polyurethane
@@ -334,6 +350,7 @@ G4VisAttributes* CYGNODetectorMaterial::VisAttributes(G4String what)
   if(what == "Concrete")      vis = ConcreteVis;
   if(what == "Camera")        vis = CameraVis;
   if(what == "CYGNO_gas")     vis = CYGNOGasVis;
+  if(what == "AmBe")          vis = AmBeVis;
   return vis;
 }
 				  

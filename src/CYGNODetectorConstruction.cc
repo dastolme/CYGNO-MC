@@ -58,7 +58,7 @@ CYGNODetectorConstruction::CYGNODetectorConstruction() :
    CYGNOLab("NoCave"),
    //CYGNOLab("LNGS"),
    //CYGNOLab("MuonLNGS"),
-   // CYGNOShielding("LIMEShield"),
+   //CYGNOShielding("LIMEShield"),
    CYGNOShielding("AmBe"),
    //CYGNOShielding("FullShield"),
   //  CYGNOShielding("NoShield"),
@@ -556,16 +556,7 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     G4Tubs* ambe_source = new G4Tubs("ambe_source_solid",0.,0.5*diam_ambe_source,0.5*z_ambe_source,0.*deg,360.*deg);
     
     ambe_capsule_log = new G4LogicalVolume(ambe_capsule,CYGNOMaterials->Material("Steel"),"ambe_capsule_log",0,0,0);
-    ambe_source_log = new G4LogicalVolume(ambe_source,CYGNOMaterials->Material("AmBe"),"ambe_source_log",0,0,0);
-    
-    
-    //AmBe lead shielding
-    G4double x_ambe_pb_shield = 20*cm;
-    G4double y_ambe_pb_shield = 10*cm;
-    z_ambe_pb_shield = 10*cm;    //10cm per due panetti, 5cm per un panetto
-    G4Box* Pb_shield = new G4Box("Pb_shield",0.5*x_ambe_pb_shield,0.5*y_ambe_pb_shield,0.5*z_ambe_pb_shield);
-    ambe_pb_shield_log = new G4LogicalVolume(Pb_shield,CYGNOMaterials->Material("Pb"),"ambe_pb_shield_log",0,0,0);
-    
+    ambe_source_log = new G4LogicalVolume(ambe_source,CYGNOMaterials->Material("AmBe"),"ambe_source_log",0,0,0);  
     
     //AmBe PE shielding
     x_ambe_shield = 100*cm; //original: 100,50,50; second config: 100,60,60
@@ -575,7 +566,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     //y_ambe_shield = 60*cm;
     //z_ambe_shield = 60*cm;
     G4Box* PE_shield = new G4Box("PE_shield",0.5*x_ambe_shield,0.5*y_ambe_shield,0.5*z_ambe_shield);
-    G4Box* Pb_hole = new G4Box("Pb_hole",0.5*x_ambe_pb_shield,0.5*y_ambe_pb_shield,0.5*z_ambe_pb_shield);
     G4Tubs* ambe_hole = new G4Tubs("ambe_hole",0.,0.5*diam_ambe_capsule+2.*mm,0.5*z_ambe_capsule+2.*mm,0.*deg,360.*deg);
     rotambeshield = new G4RotationMatrix();
 
@@ -584,12 +574,8 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     trambeshield = G4ThreeVector(0.,0.,-0.5*z_ambe_shield-5.*cm);
     G4UnionSolid* ambe_shield_back = new G4UnionSolid("ambe_shield_back",PE_shield,PE_back,rotambeshield,trambeshield); //solid box + the block on the back
     //
-    
-    trambeshield = G4ThreeVector(0.,0.,0.5*z_ambe_shield-0.5*z_ambe_pb_shield);
-    G4SubtractionSolid* ambe_shield0 = new G4SubtractionSolid("ambe_shield0",ambe_shield_back,Pb_hole,rotambeshield,trambeshield); //de-comment and comment next line for the original PE shield
-    //G4SubtractionSolid* ambe_shield0 = new G4SubtractionSolid("ambe_shield0",PE_shield,Pb_hole,rotambeshield,trambeshield); //
-    trambeshield = G4ThreeVector(0.,0.,0.5*z_ambe_shield-z_ambe_pb_shield-0.5*z_ambe_capsule-2*mm);
-    G4SubtractionSolid* ambe_shield = new G4SubtractionSolid("ambe_shield",ambe_shield0,ambe_hole,rotambeshield,trambeshield);
+    trambeshield = G4ThreeVector(0.,0.,0.5*z_ambe_shield-0.5*z_ambe_capsule-2*mm);
+    G4SubtractionSolid* ambe_shield = new G4SubtractionSolid("ambe_shield",ambe_shield_back,ambe_hole,rotambeshield,trambeshield);
     
     ambe_shield_log = new G4LogicalVolume(ambe_shield,CYGNOMaterials->Material("PE"),"ambe_shield_log",0,0,0);
     
@@ -614,7 +600,7 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     G4SubtractionSolid* PU_wallLNGS = new G4SubtractionSolid("PU_wallLNGS",PU_roomLNGS,Al_roomLNGS,rot_room_LNGS,tr_room_LNGS);
     G4SubtractionSolid* Al_ext_wallLNGS = new G4SubtractionSolid("Al_ext_wallLNGS",Al_ext_roomLNGS,PU_roomLNGS,rot_room_LNGS,tr_room_LNGS);
     
-    //tr_room_LNGS = G4ThreeVector(131.*mm,(0.5*y_roomLNGS-757.*mm),-100.*mm);
+    tr_room_LNGS = G4ThreeVector(131.*mm,(0.5*y_roomLNGS-757.*mm),-100.*mm);
     
     PC_wallLNGS_log = new G4LogicalVolume(PC_wallLNGS,CYGNOMaterials->Material("PC"),"PC_wallLNGS_log",0,0,0);
     Al_wallLNGS_log = new G4LogicalVolume(Al_wallLNGS,CYGNOMaterials->Material("Al"),"Al_wallLNGS_log",0,0,0);
@@ -935,14 +921,6 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     
   if (CYGNOShielding == "AmBe")
   { 
-    //with Lead shield
-    trAmBeshield = G4ThreeVector(0.,0.,-670.*mm); //4cm of copper: 0,0,650 for bigger PE shield, 0,0,600 for the original 100x50x50
-    trAmBePbshield = G4ThreeVector(0.,0.,0.5*z_ambe_shield-0.5*z_ambe_pb_shield);
-    trAmBePbshield+=trAmBeshield;
-    trAmBecapsule = G4ThreeVector(0.,0.,0.5*z_ambe_shield-0.5*z_ambe_capsule-z_ambe_pb_shield);
-    //trAmBecapsule+=trAmBeshield;
-    //trAmBeshield += tr_tpc;
-    //trAmBePbshield += tr_tpc;
     rotAmBe = new G4RotationMatrix();
     trAmBesource = G4ThreeVector(0.,0.,0.5*z_ambe_capsule-3.2*mm);
     trLIMEbase = G4ThreeVector(200.*mm,-200.*mm-300.*mm-60*mm,0.);
@@ -953,11 +931,11 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     trRockGallery = G4ThreeVector(6.*m,1.*m,-4.5*m);
     
     //without lead shield
-    /* trAmBeshield = G4ThreeVector(0.,0.,-600.*mm);
+    trAmBeshield = G4ThreeVector(0.,0.,-600.*mm - 5.*cm);
     trAmBecapsule = G4ThreeVector(0.,0.,0.5*z_ambe_shield-0.5*z_ambe_capsule);
     trAmBeshield += tr_tpc;
     rotAmBe = new G4RotationMatrix();
-    trAmBesource = G4ThreeVector(0.,0.,0.5*z_ambe_capsule-3.2*mm);*/
+    trAmBesource = G4ThreeVector(0.,0.,0.5*z_ambe_capsule-3.2*mm);
   }
     
   //FIXME
@@ -1134,12 +1112,10 @@ G4VPhysicalVolume* CYGNODetectorConstruction::Construct()
     cad_LIMEResistors_physical = new G4PVPlacement(G4Transform3D(rot,tr_cad-tr_tpc), 
                                 cad_LIMEResistors_logical,"cad_LIMEResistors_physical", TPC_log, false, 0, true); 
   }  
-    
-
+  
   if (CYGNOShielding == "AmBe")
   {
     ambe_shield_phys = new G4PVPlacement(rotAmBe,trAmBeshield+tr_shield3-tr_shield_ext-tr_room_LNGS, ambe_shield_log, "ambe_shield", Shield3_log,false,0,true);
-    ambe_pb_shield_phys = new G4PVPlacement(rotAmBe,trAmBePbshield+tr_shield3-tr_shield_ext-tr_room_LNGS, ambe_pb_shield_log, "ambe_pb_shield", Shield3_log,false,0,true);
     ambe_capsule_phys = new G4PVPlacement(rotAmBe,trAmBecapsule+trAmBeshield+tr_shield3-tr_shield_ext-tr_room_LNGS, ambe_capsule_log,"ambe_capsule",Shield3_log, false, 0, true);
     ambe_source_phys = new G4PVPlacement(rotAmBe,trAmBesource, ambe_source_log,"ambe_source",ambe_capsule_log, false, 0, true);
     PC_wallLNGS_phys = new G4PVPlacement(rot_room_LNGS,tr+tr_shield3-tr_shield_ext,PC_wallLNGS_log,"PC_wallLNGS",Shield2_log,false,0,true);
@@ -1211,13 +1187,12 @@ void CYGNODetectorConstruction::SaveMassAndDensity()
   if (infile.good()) {
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_LIMEDetectorBody_logical);
     CYGNOProperties->AddVolumeNameMassAndDensity(cad_LIMEinternalStructure_logical);
-    CYGNOProperties->AddVolumeNameMassAndDensity(camera_log);
-    CYGNOProperties->AddVolumeNameMassAndDensity(camera_lens_log);
+    // CYGNOProperties->AddVolumeNameMassAndDensity(camera_log);
+    // CYGNOProperties->AddVolumeNameMassAndDensity(camera_lens_log);
     if (CYGNOShielding == "AmBe"){
       CYGNOProperties->AddVolumeNameMassAndDensity(ambe_capsule_log);
       CYGNOProperties->AddVolumeNameMassAndDensity(ambe_source_log);
       CYGNOProperties->AddVolumeNameMassAndDensity(ambe_shield_log);
-      CYGNOProperties->AddVolumeNameMassAndDensity(ambe_pb_shield_log);
       CYGNOProperties->AddVolumeNameMassAndDensity(Al_wallLNGS_log);
       CYGNOProperties->AddVolumeNameMassAndDensity(PC_wallLNGS_log);
       CYGNOProperties->AddVolumeNameMassAndDensity(PU_wallLNGS_log);
@@ -1303,7 +1278,6 @@ void CYGNODetectorConstruction::UpdateGeometry()
   camera_lens_log=0;
  // camera_shield_log=0;
   ambe_shield_log=0;
-  ambe_pb_shield_log=0;
   ambe_capsule_log=0;
   ambe_capsule_log=0;
   PC_wallLNGS_log=0;

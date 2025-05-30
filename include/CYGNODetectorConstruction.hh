@@ -192,7 +192,6 @@ class CYGNODetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume * ambe_capsule_log;
     G4LogicalVolume * ambe_source_log;
     G4LogicalVolume * ambe_shield_log;
-    G4LogicalVolume * ambe_pb_shield_log;
     G4LogicalVolume * PC_wallLNGS_log;
     G4LogicalVolume * Al_wallLNGS_log;
     G4LogicalVolume * PU_wallLNGS_log;

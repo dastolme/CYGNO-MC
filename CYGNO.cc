@@ -60,7 +60,7 @@ int main(int argc,char** argv)
   // PHYSICS
   // CYGNO physics list is the Shielding physics list with the addition of emlists option4 and of fluo,PIXE,Auger. In a second moment we can add the optical photons and simulate the scintillation
   // For the study of systematics, change Shielding to QGSP_BERT_HP and QGSP_BIC_HP, and the option4 to livermore and penelope.
-  CYGNOPhysicsList* physics = new CYGNOPhysicsList;
+  CYGNOPhysicsList* physics = new CYGNOPhysicsList();
   physics->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physics);
    

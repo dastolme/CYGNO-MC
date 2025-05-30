@@ -10,3 +10,6 @@
 #define CYGNOGAS (9)
 #define UNKNOWN (-1)
 #define SPHERE (-11)
+#define TUNNEL (10)
+#define DAMA (11)
+#define CONTROLROOM (12)
