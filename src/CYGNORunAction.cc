@@ -47,6 +47,8 @@ void CYGNORunAction::Book()
 
   man->SetFirstNtupleId(1);
 
+  man->SetCompressionLevel(1);
+
 
   // ---- primary ntuple ------
   // id==1
